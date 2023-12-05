@@ -1,19 +1,11 @@
 {
   "compilerOptions": {
-    "noEmit": false,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
-    "module": "es6",
-    "target": "es6",
-    "moduleResolution": "node",
-    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "react",
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["./src/**/*"]
 }
