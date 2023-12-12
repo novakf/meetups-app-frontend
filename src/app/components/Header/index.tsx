@@ -109,6 +109,10 @@ const Container = styled.div`
   padding: 0 24px;
   justify-content: space-between;
   border-bottom: 1px solid #f1f1f1;
+  position: fixed;
+  background: #fff;
+  z-index: 10;
+  width: calc(100% - 47px);
 `
 
 export default Header
