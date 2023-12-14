@@ -5,6 +5,7 @@ import robot from '../../assets/robot.png'
 import angryRobot from '../../assets/angry-robot.png'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
+import BmstuLogo from '../../icons/BmstuLogo'
 
 type Props = {
   open: boolean
@@ -36,6 +37,7 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
               Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
             </Hint>
           )}
+          <BmstuLogo style={{ width: '50%', height: '100%', position: 'absolute', top: '0', zIndex: '0', left: '0' }} />
         </Left>
         <Right>
           {formType === 'Login' ? (
@@ -53,6 +55,7 @@ const Hint = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  z-index: 1;
 `
 
 const ChangeContentButton = styled.div`
@@ -70,6 +73,7 @@ const ImageContainer = styled.div<{ $error: boolean }>`
   background-repeat: no-repeat;
   margin-left: auto;
   margin-right: auto;
+  z-index: 1;
 
   transition: all 0.3s;
 `
@@ -80,6 +84,7 @@ const Content = styled.div`
 
 const LeftTitle = styled.div`
   font-size: 24px;
+  z-index: 1;
 `
 
 const Left = styled.div`

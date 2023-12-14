@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo-bmstu.png'
 import PopupForm from '../PopupForm'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   const [loginOpen, setLoginOpen] = useState(false)
@@ -10,14 +11,14 @@ const Header = () => {
   return (
     <Container>
       <Left>
-        <Logo href="/">
+        <Logo to="/">
           <LogoImg src={logo} />
           Митапы.
         </Logo>
         <Column>|</Column>
         <Links>
-          <a href="/speakers">Спикеры</a>
-          <a href="/meetups">Мои заявки</a>
+          <Link to="/speakers">Спикеры</Link>
+          <Link to="/meetups">Мои заявки</Link>
         </Links>
       </Left>
       <Action>
@@ -92,7 +93,7 @@ const LogoImg = styled.img`
   width: 36px;
 `
 
-const Logo = styled.a`
+const Logo = styled(Link)`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -106,13 +107,13 @@ const Container = styled.div`
   display: flex;
   height: 70px;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 40px;
   justify-content: space-between;
   border-bottom: 1px solid #f1f1f1;
   position: fixed;
   background: #fff;
   z-index: 10;
-  width: calc(100% - 47px);
+  width: calc(100% - 84px);
 `
 
 export default Header
