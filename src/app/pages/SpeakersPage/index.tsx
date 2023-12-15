@@ -1,13 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
-import speakers from '../../mocks/speakers'
+import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
+import { SpeakerType } from '../../types'
 
 const SpeakersPage: React.FC = () => {
-  const [company, setCompany] = useState('')
-  const [searchValue, setSearchValue] = useState('')
+  let companyQuery = useLocation().search.split('company=')[1]
+    ? (useLocation().search.split('company=')[1] as string)
+    : ''
+  const [company, setCompany] = useState(companyQuery)
+  const [searchValue, setSearchValue] = useState(companyQuery)
+  const [speakers, setSpeakers] = useState<SpeakerType[]>([])
+  const [response, setResponse] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  console.log(loading)
+
+  useEffect(() => {
+    setLoading(true)
+    fetch(`http://localhost:3001/speakers/?company=${company}`)
+      .then((response) => {
+        if (!response) {
+          setResponse(true)
+        }
+        return response.text()
+      })
+      .then((data) => {
+        setSpeakers(JSON.parse(data).speakers)
+        setLoading(false)
+      })
+      .catch((error) => {
+        if (!response) setSpeakers(speakersMock)
+      })
+  }, [company])
+
+  const handleOrgEnter = (event: React.KeyboardEvent) => {
+    let value = (event.target as HTMLInputElement).value
+    if (event.key === 'Enter') {
+      setCompany(value)
+      window.location.href = `?company=${value}`
+    }
+  }
 
   return (
     <Container>
@@ -21,32 +56,48 @@ const SpeakersPage: React.FC = () => {
           placeholder="Введите название компании"
           value={searchValue}
           onChange={(e) => setSearchValue(e.currentTarget.value)}
+          onKeyDown={handleOrgEnter}
         />
-        <button onClick={() => setCompany(searchValue)}>
+        <button
+          onClick={() => {
+            setCompany(searchValue)
+            window.location.href = `?company=${searchValue}`
+          }}
+        >
           <SearchIcon />
         </button>
       </SearchContainer>
 
-      <SpeakersContainer>
-        {speakers.map((speaker) => {
-          return (
-            <SpeakerCard key={speaker.id}>
-              <LinkToSpeaker to={`/speakers/${speaker.id}`}>
-                <ImageContainer>
-                  <Avatar src={speaker.avatar_img} />
-                </ImageContainer>
-                <Content>
-                  <Name>{speaker.name}</Name>
-                  <Info>{speaker.organization}</Info>
-                </Content>
-              </LinkToSpeaker>
-            </SpeakerCard>
-          )
-        })}
-      </SpeakersContainer>
+      {speakers[0] ? (
+        <SpeakersContainer>
+          {speakers.map((speaker) => {
+            return (
+              <SpeakerCard key={speaker.id}>
+                <LinkToSpeaker to={`/speakers/${speaker.id}`}>
+                  <ImageContainer>
+                    <Avatar src={speaker.avatarImg} />
+                  </ImageContainer>
+                  <Content>
+                    <Name>{speaker.name}</Name>
+                    <Info>{speaker.organization}</Info>
+                  </Content>
+                </LinkToSpeaker>
+              </SpeakerCard>
+            )
+          })}
+        </SpeakersContainer>
+      ) : (
+        <NotFound>{!loading && 'Спикеры не найдены'}</NotFound>
+      )}
     </Container>
   )
 }
+
+const NotFound = styled.div`
+  text-align: center;
+  font-size: 16px;
+  color: #525252;
+`
 
 const SearchContainer = styled.div`
   display: flex;
@@ -168,7 +219,7 @@ const SpeakersContainer = styled.div`
   padding: 30px 0;
   gap: 60px;
 
-  @media(max-width: 751px) {
+  @media (max-width: 751px) {
     justify-content: center;
   }
 `

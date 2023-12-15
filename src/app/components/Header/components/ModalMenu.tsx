@@ -29,9 +29,6 @@ const ModalMenu: React.FC<Props> = ({ open, onClose, children }) => {
         <SLink onClick={handleClick} to="/speakers">
           Спикеры
         </SLink>
-        <SLink onClick={handleClick} to="/meetups">
-          Мои заявки
-        </SLink>
       </ModalContent>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />

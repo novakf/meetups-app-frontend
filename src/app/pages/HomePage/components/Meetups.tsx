@@ -120,6 +120,10 @@ const Cards = styled.ul`
   padding: 10px 0;
   gap: 60px;
   margin: 20px 0 50px 0;
+
+  @media (max-width: 800px) {
+    justify-content: center;
+  }
 `
 
 export default Meetups

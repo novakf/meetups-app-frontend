@@ -14,7 +14,7 @@ const Breadcrumbs: React.FC<Props> = ({ children }) => {
           return (
             <Section key={i}>
               {child}
-              {i !== children.length - 1 && <ArrowRight />}
+              {i !== children.length - 1 && <SArrowRight />}
             </Section>
           )
         })
@@ -24,6 +24,12 @@ const Breadcrumbs: React.FC<Props> = ({ children }) => {
     </Container>
   )
 }
+
+const SArrowRight = styled(ArrowRight)`
+  @media (max-width: 751px) {
+    width: 14px;
+  }
+`
 
 const Container = styled.div`
   display: flex;
@@ -35,6 +41,8 @@ const Container = styled.div`
   z-index: 1;
 
   @media (max-width: 751px) {
+    gap: 5px;
+    padding: 6px 10px;
   }
 `
 
@@ -46,6 +54,7 @@ const Section = styled.div`
 
   @media (max-width: 751px) {
     font-size: 12px;
+    gap: 5px;
   }
 `
 

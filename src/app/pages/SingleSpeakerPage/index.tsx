@@ -1,16 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { styled } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
-import speakers from '../../mocks/speakers'
+import speakersMock from '../../mocks/speakers'
+import { SpeakerType } from '../../types'
 
 const SingleSpeakerPage: React.FC = () => {
+  const [response, setResponse] = useState(false)
+  const [currentSpeaker, setCurrentSpeaker] = useState<SpeakerType | undefined>()
+  const [loading, setLoading] = useState(true)
+
   const location = useLocation()
   const speakerId = Number(location.pathname.split('/')[2])
 
-  let currentSpeaker: any = speakers.find((speaker) => speaker.id === speakerId)
+  useEffect(() => {
+    setLoading(true)
+    fetch(`http://localhost:3001/speakers/${speakerId}`)
+      .then((response) => {
+        if (response.ok) {
+          setResponse(true)
+        }
+        return response.text()
+      })
+      .then((data) => {
+        setCurrentSpeaker(JSON.parse(data))
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        setLoading(false)
+        if (!response) setCurrentSpeaker(speakersMock.find((speaker) => speaker.id === speakerId))
+      })
+  }, [])
 
-  return (
+  return currentSpeaker ? (
     <Container>
       <Breadcrumbs>
         <SLink to={'/'}>Домашняя страница</SLink>
@@ -21,7 +44,7 @@ const SingleSpeakerPage: React.FC = () => {
       <SpeakerContainer>
         <Banner>
           <AvatarContainer>
-            <Avatar src={currentSpeaker.avatar_img} />
+            <Avatar src={currentSpeaker.avatarImg} />
           </AvatarContainer>
           <MainInfo>
             <Name>{currentSpeaker.name}</Name>
@@ -44,8 +67,18 @@ const SingleSpeakerPage: React.FC = () => {
         </Info>
       </SpeakerContainer>
     </Container>
+  ) : (
+    <Container>
+      <Error>{!loading && 'Спикер не найден'}</Error>
+    </Container>
   )
 }
+
+const Error = styled.div`
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+`
 
 const SpeakerContainer = styled.div`
   display: flex;
@@ -105,11 +138,23 @@ const About = styled.div`
 const Info = styled.div`
   display: flex;
   gap: 20px;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+
+    div {
+      width: 100%;
+    }
+  }
 `
 
 const CompanyName = styled.div`
   font-size: 25px;
   color: #00ddff;
+
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
 `
 
 const Name = styled.div`
@@ -117,6 +162,10 @@ const Name = styled.div`
   font-weight: bold;
   margin-bottom: 10px;
   color: #2c2e51;
+
+  @media (max-width: 500px) {
+    font-size: 30px;
+  }
 `
 
 const MainInfo = styled.div`
@@ -131,8 +180,8 @@ const Avatar = styled.img`
 
 const AvatarContainer = styled.div`
   display: flex;
-  height: 180px;
-  width: 180px;
+  max-height: 180px;
+  max-width: 180px;
   overflow: hidden;
   border-radius: 50%;
   margin: 0;

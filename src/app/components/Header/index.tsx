@@ -21,7 +21,6 @@ const Header = () => {
         <Column>|</Column>
         <Links>
           <Link to="/speakers">Спикеры</Link>
-          <Link to="/meetups">Мои заявки</Link>
         </Links>
       </Left>
       <Action>

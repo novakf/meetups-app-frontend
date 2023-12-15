@@ -25,7 +25,7 @@ const HomePage: React.FC = () => {
 
   return (
     <Container>
-      <Banner ref={bannerRef}/>
+      <Banner ref={bannerRef} />
       <Title ref={titleRef}>
         Проведение митапов
         <br /> в МГТУ им. Н. Э. Баумана
@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
           <BlockTitle>Предстоящие события</BlockTitle>
           <Meetups meetups={meetups} />
         </UpcomingEvents>
-        <LinkToSpeakers to='/speakers'>Стать организатором митапа</LinkToSpeakers>
+        <LinkToSpeakers to="/speakers">Стать организатором митапа</LinkToSpeakers>
       </Content>
     </Container>
   )
@@ -63,6 +63,10 @@ const Content = styled.div`
   padding: 40px 40px;
   align-items: center;
   background: #fff;
+  overflow: hidden;
+  @media (max-width: 500px) {
+    padding: 40px 10px;
+  }
 `
 
 const UpcomingEvents = styled.div`
@@ -80,6 +84,11 @@ const Title = styled.div`
   top: 30%;
   font-size: 80px;
   color: #e3e3e3;
+
+  @media (max-width: 800px) {
+    font-size: 40px;
+    padding: 0 10px;
+  }
 `
 
 const Banner = styled.div`

@@ -45,6 +45,17 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
           ) : (
             <SignupForm error={error} setError={setError} />
           )}
+          
+          {formType === 'Login' ? (
+            <Hint style={{display: window.innerWidth < 500 ? 'flex' : 'none'}}>
+              Нет аккаунта?{' '}
+              <ChangeContentButton onClick={() => setFormType('Signup')}>Создать аккаунт</ChangeContentButton>
+            </Hint>
+          ) : (
+            <Hint style={{display: window.innerWidth < 500 ? 'flex' : 'none'}}> 
+              Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
+            </Hint>
+          )}
         </Right>
       </Content>
     </Modal>
@@ -56,6 +67,10 @@ const Hint = styled.div`
   align-items: center;
   gap: 10px;
   z-index: 1;
+
+  @media (max-width: 500px) {
+    margin-top: 20px;
+  }
 `
 
 const ChangeContentButton = styled.div`
@@ -97,6 +112,10 @@ const Left = styled.div`
   padding: 24px;
   gap: 40px;
   justify-content: space-between;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `
 
 const Right = styled.div`
@@ -105,6 +124,10 @@ const Right = styled.div`
   width: 50%;
   border-radius: 10px;
   padding: 24px;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `
 
 export default PopupForm
