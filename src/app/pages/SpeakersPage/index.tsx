@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { styled } from 'styled-components'
 import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
@@ -32,6 +32,7 @@ const SpeakersPage: React.FC = () => {
         setLoading(false)
       })
       .catch((error) => {
+        console.log(error)
         if (!response) setSpeakers(speakersMock)
       })
   }, [company])
@@ -232,8 +233,6 @@ const SLink = styled(Link)`
     color: #535353;
   }
 `
-
-const StyledBreadcrumbs = styled(Breadcrumbs)``
 
 const Container = styled.div`
   display: flex;

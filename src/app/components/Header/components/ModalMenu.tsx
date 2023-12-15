@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import PopupForm from '../../PopupForm'
 import { Link } from 'react-router-dom'
@@ -6,10 +6,9 @@ import { Link } from 'react-router-dom'
 type Props = {
   open: boolean
   onClose: () => void
-  children?: ReactNode[]
 }
 
-const ModalMenu: React.FC<Props> = ({ open, onClose, children }) => {
+const ModalMenu: React.FC<Props> = ({ open, onClose }) => {
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
 
@@ -40,26 +39,6 @@ const SLink = styled(Link)`
   text-decoration: none;
   color: #000;
   font-size: 20px;
-`
-
-const Action = styled.div`
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-`
-
-const LoginButton = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.3s;
-  border-radius: 14px;
-  padding: 5px 14px 7px 14px;
-
-  &:hover {
-    background: #efefef;
-  }
 `
 
 const SignupButton = styled.button`

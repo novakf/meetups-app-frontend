@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
 
-const Header = () => {
+const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
