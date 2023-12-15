@@ -250,6 +250,10 @@ Error generating stack: `+o.message+`
   background: white;
 `,qs=C.div`
   width: 40%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `,Gt=C.div`
   font-size: 16px;
   color: #525252;
@@ -261,16 +265,16 @@ Error generating stack: `+o.message+`
   display: flex;
   flex-direction: column;
   width: 60%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `,tc=C.div`
   display: flex;
   gap: 20px;
 
   @media (max-width: 500px) {
     flex-direction: column;
-
-    div {
-      width: 100%;
-    }
   }
 `,nc=C.div`
   font-size: 25px;
@@ -317,6 +321,7 @@ Error generating stack: `+o.message+`
 `,de=C(a3)`
   text-decoration: none;
   color: #000;
+  text-wrap: nowrap;
 
   &:hover {
     color: #535353;
