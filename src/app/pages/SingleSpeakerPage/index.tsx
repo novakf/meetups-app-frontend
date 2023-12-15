@@ -116,6 +116,10 @@ const ContactsContainer = styled.div`
 
 const Contacts = styled.div`
   width: 40%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `
 
 const Text = styled.div`
@@ -133,6 +137,10 @@ const About = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `
 
 const Info = styled.div`
@@ -141,10 +149,6 @@ const Info = styled.div`
 
   @media (max-width: 500px) {
     flex-direction: column;
-
-    div {
-      width: 100%;
-    }
   }
 `
 
@@ -207,6 +211,7 @@ const Container = styled.div`
 const SLink = styled(Link)`
   text-decoration: none;
   color: #000;
+  text-wrap: nowrap;
 
   &:hover {
     color: #535353;
