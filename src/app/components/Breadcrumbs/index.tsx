@@ -12,7 +12,7 @@ const Breadcrumbs: React.FC<Props> = ({ children }) => {
       {Array.isArray(children) ? (
         children.map((child, i) => {
           return (
-            <Section>
+            <Section key={i}>
               {child}
               {i !== children.length - 1 && <ArrowRight />}
             </Section>

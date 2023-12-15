@@ -31,7 +31,7 @@ const SpeakersPage: React.FC = () => {
       <SpeakersContainer>
         {speakers.map((speaker) => {
           return (
-            <SpeakerCard>
+            <SpeakerCard key={speaker.id}>
               <LinkToSpeaker to={`/speakers/${speaker.id}`}>
                 <ImageContainer>
                   <Avatar src={speaker.avatar_img} />

@@ -3,6 +3,7 @@ import { styled } from 'styled-components'
 import bmstu from '../../assets/bmstu1.jpg'
 import Meetups from './components/Meetups'
 import meetups from '../../mocks/meetups'
+import { Link } from 'react-router-dom'
 
 const HomePage: React.FC = () => {
   const titleRef = createRef<HTMLDivElement>()
@@ -34,13 +35,13 @@ const HomePage: React.FC = () => {
           <BlockTitle>Предстоящие события</BlockTitle>
           <Meetups meetups={meetups} />
         </UpcomingEvents>
-        <LinkToSpeakers href='/speakers'>Стать организатором митапа</LinkToSpeakers>
+        <LinkToSpeakers to='/speakers'>Стать организатором митапа</LinkToSpeakers>
       </Content>
     </Container>
   )
 }
 
-const LinkToSpeakers = styled.a`
+const LinkToSpeakers = styled(Link)`
   font-size: 24px;
   text-decoration: underline;
   cursor: pointer;

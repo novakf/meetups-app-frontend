@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SingleSpeakerPage from './pages/SingleSpeakerPage'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
+import Footer from './components/Footer'
 
 const App: React.FC = () => {
   return (

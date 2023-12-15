@@ -12,6 +12,8 @@ export default [
     id: 1,
     name: 'Никита Иванов',
     organization: 'SberTech',
+    email: 'speaker@mail.ru',
+    phone: '8(917)878-4857',
     avatar_img: avatar1,
     description:
       'Исследователь Computer Vision в Google, один из авторов знаменитой работы 2020 года по первому применению архитектуры Трансформеров в CV.',
@@ -19,6 +21,8 @@ export default [
   {
     id: 2,
     name: 'Алиса Измайлова',
+    email: 'nik@mail.ru',
+    phone: '8(917)898-4857',
     avatar_img: avatar2,
     description:
       'Director of Artificial Intelligence в NVIDIA. Ранее работал инженером по разработке ПО в IBM. Затем около 5 лет работал в Samsung Electronics, где c 2012 года занимался свёрточными нейронными сетями и Deep Learning',
@@ -27,13 +31,18 @@ export default [
     id: 3,
     name: 'Тимур Максимов',
     organization: 'Mail.ru',
+    email: 'nik@mail.ru',
+    phone: '8(917)898-4857',
     avatar_img: avatar3,
-    description: avatar4,
+    description:
+      'Director of Artificial Intelligence в NVIDIA. Ранее работал инженером по разработке ПО в IBM. Затем около 5 лет работал в Samsung Electronics, где c 2012 года занимался свёрточными нейронными сетями и Deep Learning',
   },
   {
     id: 4,
     name: 'Дмитрий Викторов',
     organization: 'SberTech',
+    email: 'nik@mail.ru',
+    phone: '8(917)898-4857',
     avatar_img: avatar4,
     description:
       'Основатель группы компаний EORA, со-основатель DisplAir. Выпускник МГУ им. Ломоносова. Трижды лауреат премии наше подмосковье. Многократный призер Российских и международных хакатонов.',
@@ -42,6 +51,8 @@ export default [
     id: 5,
     name: 'Сергей Михайлов',
     organization: 'Yandex',
+    email: 'nik@mail.ru',
+    phone: '8(917)897-4857',
     avatar_img: avatar5,
     description:
       'К.ф.-м.н., руководитель направления «Kaspersky Neuromorphic Platform», базирующемся на импульсных нейронных сетях (SNN) и нейроморфном чипе Алтай, руководитель разработки системы предиктивной аналитики "Kaspersky Machine Learning for Anomaly Detection"',
@@ -51,6 +62,8 @@ export default [
     name: 'Алексей Соболев',
     avatar_img: avatar6,
     organization: 'Ozon',
+    email: 'nik@mail.ru',
+    phone: '8(917)898-4857',
     description:
       'Лидер команды компьютерного зрения. С 2015 года занимается компьютерным зрением, множество проектов от ADAS до систем сличения амурских тигров. С 2020 года возглавляет в SberDevices команду CV.',
   },
@@ -59,6 +72,8 @@ export default [
     name: 'Евгений Анисимов',
     organization: 'Tesla',
     avatar_img: avatar7,
+    email: 'nik@mail.ru',
+    phone: '8(917)897-4857',
     description:
       'Основатель Aigents, архитектор по ИИ и блокчейну SingularityNET, ведущий специалист НГУ, организатор и модератор AGI-in-Russian',
   },
@@ -66,6 +81,8 @@ export default [
     id: 8,
     name: 'Михаил Иванов',
     organization: 'VK',
+    email: 'nik@mail.ru',
+    phone: '8(917)897-4857',
     avatar_img: avatar8,
     description:
       'Руководитель отдела искусственного интеллекта Цифрум (Росатом). Работал в ABBYY, Medcore, TNK-BP, Microtest, Связной. Визионер в области нейроморфных систем искусственного интеллекта.',
