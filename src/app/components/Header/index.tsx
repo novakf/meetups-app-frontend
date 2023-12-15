@@ -3,10 +3,13 @@ import styled from 'styled-components'
 import logo from '../../assets/logo-bmstu.png'
 import PopupForm from '../PopupForm'
 import { Link } from 'react-router-dom'
+import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
+import ModalMenu from './components/ModalMenu'
 
 const Header = () => {
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
+  const [modalMenuOpen, setModalMenuOpen] = useState(false)
 
   return (
     <Container>
@@ -25,11 +28,29 @@ const Header = () => {
         <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
         <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
       </Action>
+      <BurgerMenu>
+        <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
+          <BurgerMenuIcon />
+        </StyledBurgerMenuIcon>
+        <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
+      </BurgerMenu>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
     </Container>
   )
 }
+
+const StyledBurgerMenuIcon = styled.div<{ $open: boolean }>`
+  transition: all 0.2s;
+
+  ${(props) => props.$open && `transform: rotate(-90deg);`}
+`
+
+const BurgerMenu = styled.div`
+  @media (min-width: 751px) {
+    display: none;
+  }
+`
 
 const Column = styled.div`
   font-size: 40px;
@@ -37,6 +58,10 @@ const Column = styled.div`
   color: #000;
   font-weight: 100;
   align-items: center;
+
+  @media (max-width: 750px) {
+    display: none;
+  }
 `
 
 const Links = styled.div`
@@ -46,6 +71,10 @@ const Links = styled.div`
   a {
     text-decoration: none;
     color: #000;
+  }
+
+  @media (max-width: 750px) {
+    display: none;
   }
 `
 
@@ -58,6 +87,10 @@ const Left = styled.div`
 const Action = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 750px) {
+    display: none;
+  }
 `
 
 const LoginButton = styled.button`
@@ -113,7 +146,7 @@ const Container = styled.div`
   position: fixed;
   background: #fff;
   z-index: 10;
-  width: calc(100% - 84px);
+  width: calc(100% - 80px);
 `
 
 export default Header

@@ -105,6 +105,7 @@ const Card = styled.div`
   border-radius: 30px;
   transition: transform 0.4s ease-out;
   outline: 1px solid #e7e7e7;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.03);

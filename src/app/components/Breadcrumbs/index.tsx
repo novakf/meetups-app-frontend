@@ -32,12 +32,21 @@ const Container = styled.div`
   border-radius: 15px;
   gap: 10px;
   width: fit-content;
+  z-index: 1;
+
+  @media (max-width: 751px) {
+  }
 `
 
 const Section = styled.div`
   display: flex;
+  align-items: center;
   gap: 10px;
   font-size: 16px;
+
+  @media (max-width: 751px) {
+    font-size: 12px;
+  }
 `
 
 export default Breadcrumbs

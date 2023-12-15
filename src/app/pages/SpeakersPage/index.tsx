@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
 import speakers from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
-import BmstuLogo from '../../icons/BmstuLogo'
 
 const SpeakersPage: React.FC = () => {
   const [company, setCompany] = useState('')
@@ -168,6 +167,10 @@ const SpeakersContainer = styled.div`
   justify-content: space-between;
   padding: 30px 0;
   gap: 60px;
+
+  @media(max-width: 751px) {
+    justify-content: center;
+  }
 `
 
 const SLink = styled(Link)`
