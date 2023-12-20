@@ -35,7 +35,7 @@ const SpeakersPage: React.FC = () => {
         console.log(error)
         if (!response) setSpeakers(speakersMock)
       })
-  }, [company])
+  }, [])
 
   const handleOrgEnter = (event: React.KeyboardEvent) => {
     let value = (event.target as HTMLInputElement).value
@@ -73,17 +73,20 @@ const SpeakersPage: React.FC = () => {
         <SpeakersContainer>
           {speakers.map((speaker) => {
             return (
-              <SpeakerCard key={speaker.id}>
-                <LinkToSpeaker to={`/speakers/${speaker.id}`}>
-                  <ImageContainer>
-                    <Avatar src={speaker.avatarImg} />
-                  </ImageContainer>
-                  <Content>
-                    <Name>{speaker.name}</Name>
-                    <Info>{speaker.organization}</Info>
-                  </Content>
-                </LinkToSpeaker>
-              </SpeakerCard>
+              (speaker.organization?.toLocaleLowerCase().includes(company.toLocaleLowerCase()) ||
+                (!company && !speaker.organization)) && (
+                <SpeakerCard key={speaker.id}>
+                  <LinkToSpeaker to={`/speakers/${speaker.id}`}>
+                    <ImageContainer>
+                      <Avatar src={speaker.avatarImg} />
+                    </ImageContainer>
+                    <Content>
+                      <Name>{speaker.name}</Name>
+                      <Info>{speaker.organization}</Info>
+                    </Content>
+                  </LinkToSpeaker>
+                </SpeakerCard>
+              )
             )
           })}
         </SpeakersContainer>
