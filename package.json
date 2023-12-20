@@ -5,7 +5,7 @@
   "homepage": "https://novakf.github.io/meetups-app-frontend",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "build": "tsc && vite build",
