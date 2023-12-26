@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { UserType } from '../../../types'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { setDataAction } from '../../../slices/userSlice'
+import { setUserDataAction } from '../../../store/slices/userSlice'
 
 const UserContainer: React.FC<UserType> = (user) => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const UserContainer: React.FC<UserType> = (user) => {
         },
       })
       .then(() => {
-        dispatch(setDataAction(undefined))
+        dispatch(setUserDataAction(undefined))
       })
       .catch(function (error) {
         console.log('UserLogoutError', error)
@@ -77,7 +77,9 @@ const Container = styled.div`
   }
 `
 
-const UserName = styled.div``
+const UserName = styled.div`
+  font-size: 16px;
+`
 
 const AvatarContainer = styled.div`
   display: flex;

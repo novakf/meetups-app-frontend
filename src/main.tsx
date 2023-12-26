@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './app'
 import './index.scss'
 import { Provider } from 'react-redux'
-import store from './app/store'
+import store from './app/store/store'
 import axios from 'axios'
 
 axios.defaults.withCredentials = true

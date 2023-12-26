@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo-bmstu.png'
 import PopupForm from '../PopupForm'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
-import { isLoggedIn, setDataAction, useData } from '../../slices/userSlice'
+import { isLoggedIn, setUserDataAction, userData } from '../../store/slices/userSlice'
 import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const user = useData()
+  const user = userData()
   const loggedIn = isLoggedIn()
 
   const dispatch = useDispatch()
@@ -29,7 +29,7 @@ const Header: React.FC = () => {
         },
       })
       .then((res) => {
-        dispatch(setDataAction(res.data))
+        dispatch(setUserDataAction(res.data))
         setLoading(false)
       })
       .catch(function (error) {
@@ -37,6 +37,30 @@ const Header: React.FC = () => {
         setLoading(false)
       })
   }, [])
+
+  const pageLinks = [
+    {
+      key: 1,
+      url: '/speakers',
+      label: 'Спикеры',
+    },
+    loggedIn
+      ? {
+          key: 2,
+          url: '/profile/meetups',
+          label: 'Мои митапы',
+        }
+      : {},
+    loggedIn
+      ? {
+          key: 3,
+          url: '/profile/draft',
+          label: 'Черновик',
+        }
+      : {},
+  ]
+
+  const { pathname } = useLocation()
 
   return (
     <Container>
@@ -48,8 +72,16 @@ const Header: React.FC = () => {
           </Logo>
           <Column>|</Column>
           <Links>
-            <Link to="/speakers">Спикеры</Link>
-            {loggedIn && <Link to="/profile/meetups">Мои митапы</Link>}
+            {pageLinks.map((el) => {
+              return (
+                el.url && (
+                  <Tab key={el.key}>
+                    <Link to={el.url}>{el.label}</Link>
+                    <Border $isActive={el.url == pathname} />
+                  </Tab>
+                )
+              )
+            })}
           </Links>
         </Left>
 
@@ -75,6 +107,31 @@ const Header: React.FC = () => {
     </Container>
   )
 }
+
+const Tab = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`
+
+const Border = styled.div<{
+  $isActive: boolean
+}>`
+  margin-top: 15px;
+  height: 1px;
+  width: 100%;
+  border-bottom: 2px solid #004dff59;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transition: all 0.3s;
+
+  ${(props) =>
+    props.$isActive &&
+    `
+    opacity: 1;
+    `};
+`
 
 const StyledBurgerMenuIcon = styled.div<{ $open: boolean }>`
   transition: all 0.2s;

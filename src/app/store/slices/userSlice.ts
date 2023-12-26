@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
-import { UserType } from '../types'
+import { UserType } from '../../types'
 
 type State = {
   userInfo: {
@@ -28,9 +28,9 @@ const dataSlice = createSlice({
   },
 })
 
-export const useData = () => useSelector((state: State) => state.userInfo.Data)
+export const userData = () => useSelector((state: State) => state.userInfo.Data)
 export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data?.id !== -1 || !state.userInfo.Data)
 
-export const { setData: setDataAction } = dataSlice.actions
+export const { setData: setUserDataAction } = dataSlice.actions
 
 export default dataSlice.reducer

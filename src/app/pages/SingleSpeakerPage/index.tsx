@@ -4,6 +4,9 @@ import { styled } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import speakersMock from '../../mocks/speakers'
 import { SpeakerType } from '../../types'
+import axios from 'axios'
+import { draftData } from '../../store/slices/draftSlice'
+import { userData } from '../../store/slices/userSlice'
 
 const SingleSpeakerPage: React.FC = () => {
   const [response, setResponse] = useState(false)
@@ -13,34 +16,50 @@ const SingleSpeakerPage: React.FC = () => {
   const location = useLocation()
   const speakerId = Number(location.pathname.split('/')[2])
 
+  const draft = draftData()
+  const user = userData()
+
   useEffect(() => {
     setLoading(true)
-    fetch(`http://localhost:3001/speakers/${speakerId}`)
+    axios.get(`http://localhost:3001/speakers/${speakerId}`)
       .then((response) => {
-        if (response.ok) {
+        if (response) {
           setResponse(true)
         }
-        return response.text()
+        return response
       })
-      .then((data) => {
-        setCurrentSpeaker(JSON.parse(data))
+      .then((result) => {
+        setCurrentSpeaker(result.data)
         setLoading(false)
       })
       .catch((error) => {
-        console.log("SpeakerError", error)
+        console.log('SpeakerError', error)
         setLoading(false)
         if (!response) setCurrentSpeaker(speakersMock.find((speaker) => speaker.id === speakerId))
       })
   }, [])
 
+  const draftSpeakersCount = draft?.speakers?.length
+
   return currentSpeaker ? (
     <Container>
-      <Breadcrumbs>
-        <SLink to={'/'}>Домашняя страница</SLink>
-        <SLink to={'/speakers'}>Спикеры</SLink>
-        <SLink to={'/speakers/'}>{currentSpeaker.name}</SLink>
-      </Breadcrumbs>
-
+      <FirstLine>
+        <Breadcrumbs>
+          <SLink to={'/'}>Домашняя страница</SLink>
+          <SLink to={'/speakers'}>Спикеры</SLink>
+          <SLink to={'/speakers/'}>{currentSpeaker.name}</SLink>
+        </Breadcrumbs>
+        <CartContainer $empty={!Boolean(draft)}>
+          {user && (
+            <>
+              <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                Моя заявка
+              </Cart>
+              <Count>{draftSpeakersCount}</Count>
+            </>
+          )}
+        </CartContainer>
+      </FirstLine>
       <SpeakerContainer>
         <Banner>
           <AvatarContainer>
@@ -73,6 +92,54 @@ const SingleSpeakerPage: React.FC = () => {
     </Container>
   )
 }
+
+const CartContainer = styled.div<{ $empty: boolean }>`
+  display: flex;
+
+  ${(p) =>
+    p.$empty &&
+    `
+    opacity: 0.4;
+  `}
+`
+
+const Count = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: #5dc2ff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  top: -10px;
+  left: -20px;
+  z-index: 2;
+`
+
+const FirstLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Cart = styled(Link)<{ $disabled: boolean }>`
+  display: flex;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 15px;
+  border: 1px solid #d5d5d5;
+  gap: 10px;
+  width: fit-content;
+  z-index: 1;
+  color: #000;
+
+  ${(p) =>
+    p.$disabled &&
+    `
+    pointer-events: none;
+  `}
+`
 
 const Error = styled.div`
   display: flex;

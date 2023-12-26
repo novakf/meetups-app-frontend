@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
-import { setDataAction } from '../../../slices/userSlice'
+import { setUserDataAction } from '../../../store/slices/userSlice'
 
 type Props = {
   setError: (value: boolean) => void
@@ -30,7 +30,7 @@ const SignupForm: React.FC<Props> = ({ setError, setMessage, setMessageText, set
         password,
       })
       .then((res) => {
-        dispatch(setDataAction(res.data.user))
+        dispatch(setUserDataAction(res.data.user))
         if (res.status === 200) {
           setMessage(true)
           setMessageText('Аккаунт успешно создан')
