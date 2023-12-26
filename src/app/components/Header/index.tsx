@@ -1,15 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo-bmstu.png'
 import PopupForm from '../PopupForm'
 import { Link } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
+import { setDataAction, useData } from '../../slices/userSlice'
+import UserContainer from './components/UserContainer'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  const user = useData()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        dispatch(setDataAction(res.data))
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log('UserInfoError', error)
+        setLoading(false)
+      })
+  }, [])
 
   return (
     <Container>
@@ -24,17 +50,23 @@ const Header: React.FC = () => {
             <Link to="/speakers">Спикеры</Link>
           </Links>
         </Left>
-        <Action>
-          <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
-          <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
-        </Action>
+
+        {!loading &&
+          (user && user.id !== -1 ? (
+            <UserContainer {...user} />
+          ) : (
+            <Action>
+              <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
+              <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
+            </Action>
+          ))}
 
         <BurgerMenu>
-        <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
-          <BurgerMenuIcon />
-        </StyledBurgerMenuIcon>
-        <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
-      </BurgerMenu>
+          <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
+            <BurgerMenuIcon />
+          </StyledBurgerMenuIcon>
+          <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
+        </BurgerMenu>
       </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />

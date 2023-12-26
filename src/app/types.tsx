@@ -40,3 +40,13 @@ export type MeetupsSpeakersType = {
   reportTheme?: string
   reportDescription?: string
 }
+
+export type UserType = {
+  id: number
+  name: string
+  phone?: string
+  email: string
+  password: string
+  avatarImg?: string
+  role: UserRoleType
+}

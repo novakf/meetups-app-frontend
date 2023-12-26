@@ -27,7 +27,7 @@ const SingleSpeakerPage: React.FC = () => {
         setLoading(false)
       })
       .catch((error) => {
-        console.log(error)
+        console.log("SpeakerError", error)
         setLoading(false)
         if (!response) setCurrentSpeaker(speakersMock.find((speaker) => speaker.id === speakerId))
       })

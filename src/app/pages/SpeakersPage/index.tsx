@@ -16,8 +16,6 @@ const SpeakersPage: React.FC = () => {
   const [response, setResponse] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  console.log(loading)
-
   useEffect(() => {
     setLoading(true)
     fetch(`http://localhost:3001/speakers/?company=${company}`)
@@ -32,7 +30,7 @@ const SpeakersPage: React.FC = () => {
         setLoading(false)
       })
       .catch((error) => {
-        console.log(error)
+        console.log("SpeakersError", error)
         if (!response) setSpeakers(speakersMock)
       })
   }, [])

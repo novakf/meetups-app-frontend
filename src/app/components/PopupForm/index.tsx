@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from '../Modal'
 import { styled } from 'styled-components'
 import robot from '../../assets/robot.png'
@@ -6,6 +6,7 @@ import angryRobot from '../../assets/angry-robot.png'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import BmstuLogo from '../../icons/BmstuLogo'
+import GenericMessage from '../Message'
 
 type Props = {
   open: boolean
@@ -19,46 +20,70 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
   }
   const [error, setError] = useState(false)
   const [formType, setFormType] = useState(type)
+  const [status, setStatus] = useState('')
+  const [message, setMessage] = useState(false)
+  const [messageText, setMessageText] = useState('')
+
+  useEffect(() => {
+    message && setTimeout(() => setMessage(false), 3000)
+  }, [message])
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Content>
-        <Left>
-          <LeftTitle>Добро пожаловать!</LeftTitle>
-          <ImageContainer $error={error}></ImageContainer>
+    <>
+      <Modal open={open} onClose={handleClose}>
+        <Content>
+          <Left>
+            <LeftTitle>Добро пожаловать!</LeftTitle>
+            <ImageContainer $error={error}></ImageContainer>
 
-          {formType === 'Login' ? (
-            <Hint>
-              Нет аккаунта?{' '}
-              <ChangeContentButton onClick={() => setFormType('Signup')}>Создать аккаунт</ChangeContentButton>
-            </Hint>
-          ) : (
-            <Hint>
-              Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
-            </Hint>
-          )}
-          <BmstuLogo style={{ width: '50%', height: '100%', position: 'absolute', top: '0', zIndex: '0', left: '0' }} />
-        </Left>
-        <Right>
-          {formType === 'Login' ? (
-            <LoginForm error={error} setError={setError} />
-          ) : (
-            <SignupForm error={error} setError={setError} />
-          )}
-          
-          {formType === 'Login' ? (
-            <Hint style={{display: window.innerWidth < 500 ? 'flex' : 'none'}}>
-              Нет аккаунта?{' '}
-              <ChangeContentButton onClick={() => setFormType('Signup')}>Создать аккаунт</ChangeContentButton>
-            </Hint>
-          ) : (
-            <Hint style={{display: window.innerWidth < 500 ? 'flex' : 'none'}}> 
-              Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
-            </Hint>
-          )}
-        </Right>
-      </Content>
-    </Modal>
+            {formType === 'Login' ? (
+              <Hint>
+                Нет аккаунта?{' '}
+                <ChangeContentButton onClick={() => setFormType('Signup')}>Создать аккаунт</ChangeContentButton>
+              </Hint>
+            ) : (
+              <Hint>
+                Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
+              </Hint>
+            )}
+            <BmstuLogo
+              style={{ width: '50%', height: '100%', position: 'absolute', top: '0', zIndex: '0', left: '0' }}
+            />
+          </Left>
+          <Right>
+            {formType === 'Login' ? (
+              <LoginForm
+                setError={setError}
+                setMessage={setMessage}
+                setMessageText={setMessageText}
+                setStatus={setStatus}
+                onSubmit={handleClose}
+              />
+            ) : (
+              <SignupForm
+                setError={setError}
+                setMessage={setMessage}
+                setMessageText={setMessageText}
+                setStatus={setStatus}
+                onSubmit={handleClose}
+              />
+            )}
+
+            {formType === 'Login' ? (
+              <Hint style={{ display: window.innerWidth < 500 ? 'flex' : 'none' }}>
+                Нет аккаунта?{' '}
+                <ChangeContentButton onClick={() => setFormType('Signup')}>Создать аккаунт</ChangeContentButton>
+              </Hint>
+            ) : (
+              <Hint style={{ display: window.innerWidth < 500 ? 'flex' : 'none' }}>
+                Уже создали? <ChangeContentButton onClick={() => setFormType('Login')}>Войти</ChangeContentButton>
+              </Hint>
+            )}
+          </Right>
+        </Content>
+      </Modal>
+      <GenericMessage status={status} open={message} text={messageText} />
+    </>
   )
 }
 
