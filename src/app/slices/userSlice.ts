@@ -29,7 +29,7 @@ const dataSlice = createSlice({
 })
 
 export const useData = () => useSelector((state: State) => state.userInfo.Data)
-export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data.id !== -1)
+export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data?.id !== -1 || !state.userInfo.Data)
 
 export const { setData: setDataAction } = dataSlice.actions
 

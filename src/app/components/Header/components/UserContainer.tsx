@@ -17,7 +17,6 @@ const UserContainer: React.FC<UserType> = (user) => {
       })
       .then(() => {
         dispatch(setDataAction(undefined))
-        
       })
       .catch(function (error) {
         console.log('UserLogoutError', error)

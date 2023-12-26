@@ -5,7 +5,7 @@ import PopupForm from '../PopupForm'
 import { Link } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
-import { setDataAction, useData } from '../../slices/userSlice'
+import { isLoggedIn, setDataAction, useData } from '../../slices/userSlice'
 import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
@@ -17,6 +17,7 @@ const Header: React.FC = () => {
   const [loading, setLoading] = useState(true)
 
   const user = useData()
+  const loggedIn = isLoggedIn()
 
   const dispatch = useDispatch()
 
@@ -48,6 +49,7 @@ const Header: React.FC = () => {
           <Column>|</Column>
           <Links>
             <Link to="/speakers">Спикеры</Link>
+            {loggedIn && <Link to="/profile/meetups">Мои митапы</Link>}
           </Links>
         </Left>
 

@@ -4,7 +4,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { styled } from 'styled-components'
 import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
-import { SpeakerType } from '../../types'
+import { MeetupsType, SpeakerType } from '../../types'
+import axios from 'axios'
+import { useData } from '../../slices/userSlice'
 
 const SpeakersPage: React.FC = () => {
   let companyQuery = useLocation().search.split('company=')[1]
@@ -13,24 +15,34 @@ const SpeakersPage: React.FC = () => {
   const [company, setCompany] = useState(companyQuery)
   const [searchValue, setSearchValue] = useState(companyQuery)
   const [speakers, setSpeakers] = useState<SpeakerType[]>([])
+  const [draft, setDraft] = useState<MeetupsType | undefined>()
   const [response, setResponse] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  const user = useData()
+
   useEffect(() => {
     setLoading(true)
-    fetch(`http://localhost:3001/speakers/?company=${company}`)
+    axios
+      .get(`http://localhost:3001/speakers/?company=${company}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((response) => {
         if (!response) {
           setResponse(true)
         }
-        return response.text()
+        return response
       })
-      .then((data) => {
-        setSpeakers(JSON.parse(data).speakers)
+      .then((res) => {
+        console.log(res)
+        setSpeakers(res.data.speakers)
+        setDraft(res.data.meetup)
         setLoading(false)
       })
       .catch((error) => {
-        console.log("SpeakersError", error)
+        console.log('SpeakersError', error)
         if (!response) setSpeakers(speakersMock)
       })
   }, [])
@@ -43,13 +55,49 @@ const SpeakersPage: React.FC = () => {
     }
   }
 
+  const draftSpeakersCount = draft?.speakers?.length
+
+  const addSpeaker = (id: number) => {
+    axios
+      .post(`http://localhost:3001/speakers/${id}`)
+      .then((res) => {
+        setDraft(res.data)
+        console.log(res)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  const deleteSpeaker = (id: number) => {
+    axios
+      .delete(`http://localhost:3001/meetups/speaker/${id}`)
+      .then((res) => {
+        setDraft(res.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   return (
     <Container>
-      <Breadcrumbs>
-        <SLink to={'/'}>Домашняя страница</SLink>
-        <SLink to={'/speakers'}>Спикеры</SLink>
-      </Breadcrumbs>
-
+      <FirstLine>
+        <Breadcrumbs>
+          <SLink to={'/'}>Домашняя страница</SLink>
+          <SLink to={'/speakers'}>Спикеры</SLink>
+        </Breadcrumbs>
+        <CartContainer $empty={!Boolean(draft)}>
+          {user && (
+            <>
+              <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                Моя заявка
+              </Cart>
+              <Count>{draftSpeakersCount}</Count>
+            </>
+          )}
+        </CartContainer>
+      </FirstLine>
       <SearchContainer>
         <input
           placeholder="Введите название компании"
@@ -83,6 +131,16 @@ const SpeakersPage: React.FC = () => {
                       <Info>{speaker.organization}</Info>
                     </Content>
                   </LinkToSpeaker>
+
+                  {user &&
+                    (draft?.speakers?.some((element) => {
+                      if (element.id === speaker.id) return true
+                      return false
+                    }) ? (
+                      <DeleteButton onClick={() => deleteSpeaker(speaker.id)}>Убрать из митапа</DeleteButton>
+                    ) : (
+                      <AddButton onClick={() => addSpeaker(speaker.id)}>Добавить в митап</AddButton>
+                    ))}
                 </SpeakerCard>
               )
             )
@@ -94,6 +152,78 @@ const SpeakersPage: React.FC = () => {
     </Container>
   )
 }
+
+const DeleteButton = styled.button`
+  background: none;
+  border: 1px solid #ff9d9d;
+  padding: 8px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #ff9d9d;
+  }
+`
+
+const AddButton = styled.button`
+  background: none;
+  border: 1px solid #91ff94;
+  padding: 8px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s;
+  &:hover {
+    background: #91ff94;
+  }
+`
+
+const CartContainer = styled.div<{ $empty: boolean }>`
+  display: flex;
+
+  ${(p) =>
+    p.$empty &&
+    `
+    opacity: 0.4;
+  `}
+`
+
+const Count = styled.div`
+  position: relative;
+  background: #5dc2ff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  top: -10px;
+  left: -20px;
+  z-index: 2;
+`
+
+const FirstLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Cart = styled(Link)<{ $disabled: boolean }>`
+  display: flex;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 15px;
+  border: 1px solid #d5d5d5;
+  gap: 10px;
+  width: fit-content;
+  z-index: 1;
+  color: #000;
+
+  ${(p) =>
+    p.$disabled &&
+    `
+    pointer-events: none;
+  `}
+`
 
 const NotFound = styled.div`
   text-align: center;
