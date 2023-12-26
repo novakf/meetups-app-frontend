@@ -27,8 +27,10 @@ const HomePage: React.FC = () => {
     <Container>
       <Banner ref={bannerRef} />
       <Title ref={titleRef}>
-        Проведение митапов
-        <br /> в МГТУ им. Н. Э. Баумана
+        <TitleText>
+          Проведение митапов
+          <br /> в МГТУ им. Н. Э. Баумана
+        </TitleText>
       </Title>
       <Content>
         <UpcomingEvents>
@@ -40,6 +42,11 @@ const HomePage: React.FC = () => {
     </Container>
   )
 }
+
+const TitleText = styled.div`
+  margin: 0 auto;
+  max-width: 1260px
+`
 
 const LinkToSpeakers = styled(Link)`
   font-size: 24px;
@@ -79,11 +86,13 @@ const BlockTitle = styled.div`
 `
 
 const Title = styled.div`
+  margin: 0 auto;
   position: fixed;
-  padding: 0 50px;
+  padding: 0 40px;
   top: 30%;
   font-size: 80px;
   color: #e3e3e3;
+  width: 100%;
 
   @media (max-width: 800px) {
     font-size: 40px;

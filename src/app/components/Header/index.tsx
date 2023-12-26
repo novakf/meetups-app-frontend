@@ -13,26 +13,29 @@ const Header: React.FC = () => {
 
   return (
     <Container>
-      <Left>
-        <Logo to="/">
-          <LogoImg src={logo} />
-          Митапы.
-        </Logo>
-        <Column>|</Column>
-        <Links>
-          <Link to="/speakers">Спикеры</Link>
-        </Links>
-      </Left>
-      <Action>
-        <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
-        <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
-      </Action>
-      <BurgerMenu>
+      <Content>
+        <Left>
+          <Logo to="/">
+            <LogoImg src={logo} />
+            Митапы.
+          </Logo>
+          <Column>|</Column>
+          <Links>
+            <Link to="/speakers">Спикеры</Link>
+          </Links>
+        </Left>
+        <Action>
+          <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
+          <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
+        </Action>
+
+        <BurgerMenu>
         <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
           <BurgerMenuIcon />
         </StyledBurgerMenuIcon>
         <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
       </BurgerMenu>
+      </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
     </Container>
@@ -138,14 +141,22 @@ const Logo = styled(Link)`
 const Container = styled.div`
   display: flex;
   height: 70px;
-  align-items: center;
-  padding: 0 40px;
-  justify-content: space-between;
+  padding: 0 50px;
   border-bottom: 1px solid #f1f1f1;
   position: fixed;
   background: #fff;
   z-index: 10;
   width: calc(100% - 80px);
+  width: calc(100% - 81px);
+`
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
 `
 
 export default Header
