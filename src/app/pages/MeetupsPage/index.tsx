@@ -6,12 +6,13 @@ import axios from 'axios'
 import { MeetupsType } from '../../types'
 import MultiDropdown from '../../components/MultiDropdown'
 import { userData } from '../../store/slices/userSlice'
+import { useDispatch } from 'react-redux'
+import { filterData, setEndDataAction, setFilterDataAction, setStartDataAction } from '../../store/slices/filterSlice'
 
 const MeetupsPage: React.FC = () => {
+  const filter = filterData()
+
   const [meetups, setMeetups] = useState<MeetupsType[]>([])
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
-  const [values, setValues] = useState([])
 
   useEffect(() => {
     axios
@@ -28,7 +29,7 @@ const MeetupsPage: React.FC = () => {
 
   const checkStatus = (status: string) => {
     let fl = 0
-    values.forEach((option: any) => {
+    filter.status.forEach((option: any) => {
       if (option.value == status) fl = 1
     })
     return fl
@@ -48,6 +49,9 @@ const MeetupsPage: React.FC = () => {
   }
 
   const user = userData()
+  const dispatch = useDispatch()
+
+  console.log(filter)
 
   return (
     <Container>
@@ -59,7 +63,12 @@ const MeetupsPage: React.FC = () => {
       </FirstLine>
 
       <Filter>
-        <SMultiDropdown onChange={setValues} value={values} options={options} getTitle={defaultGetTitle} />
+        <SMultiDropdown
+          onChange={(e) => dispatch(setFilterDataAction(e))}
+          value={filter.status}
+          options={options}
+          getTitle={defaultGetTitle}
+        />
         <Dates>
           <div>
             <DateLabel>Начало</DateLabel>
@@ -67,8 +76,8 @@ const MeetupsPage: React.FC = () => {
               style={{ marginTop: '0px' }}
               type="date"
               placeholder={'Дата проведения'}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={filter.startDate}
+              onChange={(e) => dispatch(setStartDataAction(e.target.value))}
             />
           </div>
           <div>
@@ -77,8 +86,8 @@ const MeetupsPage: React.FC = () => {
               style={{ marginTop: '0px' }}
               type="date"
               placeholder={'Дата проведения'}
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              value={filter.endDate}
+              onChange={(e) => dispatch(setEndDataAction(e.target.value))}
             />
           </div>
         </Dates>
@@ -102,11 +111,11 @@ const MeetupsPage: React.FC = () => {
           let created = dateCreate.toLocaleDateString('ru-RU')
           let dateStr = date.toLocaleDateString('ru-RU')
 
-          let start = new Date(startDate)
-          let end = new Date(endDate)
+          let start = new Date(filter.startDate)
+          let end = new Date(filter.endDate)
           return (
-            ((dateCompare(date, start) == 1 && dateCompare(end, date) == 1) || !startDate || !endDate) &&
-            (!values.length || checkStatus(meetup.status) == 1) && (
+            ((dateCompare(date, start) == 1 && dateCompare(end, date) == 1) || !filter.startDate || !filter.endDate) &&
+            (!filter.status.length || checkStatus(meetup.status) == 1) && (
               <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
                 <Row $moder={user.role === 'модератор'}>
                   <Cell>{++i}</Cell>
