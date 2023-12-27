@@ -1,4 +1,4 @@
-export type MeetupStatusType = 'черновик' | 'удален' | 'сформирован' | 'завершен' | 'отклонен'
+export type MeetupStatusType = 'черновик' | 'удален' | 'сформирован' | 'утвержден' | 'отклонен'
 
 export type SpeakerStatusType = 'активный' | 'удален'
 

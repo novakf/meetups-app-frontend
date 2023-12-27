@@ -40,7 +40,7 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
         console.log(error)
       })
   }
-
+  console.log(user)
   return (
     <SpeakersContainer>
       {speakers.map((speaker) => {
@@ -59,6 +59,7 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
               </LinkToSpeaker>
 
               {user &&
+                user.id !== -1 &&
                 (draft?.speakers?.some((element) => {
                   if (element.id === speaker.id) return true
                   return false

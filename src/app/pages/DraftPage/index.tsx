@@ -164,7 +164,7 @@ const Action = styled.div`
   align-items: center;
   margin-top: 30px;
   gap: 20px;
-  justify-content: flex-start;
+  justify-content: center;
 `
 
 const SubmitButton = styled.button`
@@ -229,7 +229,7 @@ const StyledInput = styled.input<{ $error?: boolean }>`
   outline: none;
   border-bottom: 2px solid #dddddd;
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 16px;
   transition: all 0.2s;
   width: 100%;
 

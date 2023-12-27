@@ -64,7 +64,7 @@ const Header: React.FC = () => {
             </Tab>
             {user && user.id !== -1 && (
               <Tab>
-                <Link to={'/profile/meetups'}>Мои митапы</Link>
+                <Link to={'/profile/meetups'}>{user.role == 'модератор' ? 'Текущие заявки' : 'Мои заявки'}</Link>
                 <Border $isActive={'/profile/meetups' == pathname} />
               </Tab>
             )}
