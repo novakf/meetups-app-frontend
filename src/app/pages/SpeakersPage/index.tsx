@@ -5,6 +5,11 @@ import { styled } from 'styled-components'
 import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
 import { SpeakerType } from '../../types'
+import axios from 'axios'
+import { isLoggedIn, userData } from '../../store/slices/userSlice'
+import Speakers from './components/Speakers'
+import { useDispatch } from 'react-redux'
+import { draftData, setDraftDataAction } from '../../store/slices/draftSlice'
 
 const SpeakersPage: React.FC = () => {
   let companyQuery = useLocation().search.split('company=')[1]
@@ -16,23 +21,33 @@ const SpeakersPage: React.FC = () => {
   const [response, setResponse] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  console.log(loading)
+  const dispatch = useDispatch()
+  const user = userData()
+  const draft = draftData()
+  const loggedIn = isLoggedIn()
 
   useEffect(() => {
     setLoading(true)
-    fetch(`http://localhost:3001/speakers/?company=${company}`)
+    axios
+      .get(`http://localhost:3001/speakers/?company=${company}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((response) => {
         if (!response) {
           setResponse(true)
         }
-        return response.text()
+        return response
       })
-      .then((data) => {
-        setSpeakers(JSON.parse(data).speakers)
+      .then((res) => {
+        console.log(res)
+        setSpeakers(res.data.speakers)
+        dispatch(setDraftDataAction(res.data.meetup))
         setLoading(false)
       })
       .catch((error) => {
-        console.log(error)
+        console.log('SpeakersError', error)
         if (!response) setSpeakers(speakersMock)
       })
   }, [])
@@ -45,13 +60,28 @@ const SpeakersPage: React.FC = () => {
     }
   }
 
+  const draftSpeakersCount = draft?.speakers?.length
+
   return (
     <Container>
-      <Breadcrumbs>
-        <SLink to={'/'}>Домашняя страница</SLink>
-        <SLink to={'/speakers'}>Спикеры</SLink>
-      </Breadcrumbs>
-
+      <FirstLine>
+        <Breadcrumbs>
+          <SLink to={'/'}>Домашняя страница</SLink>
+          <SLink to={'/speakers'}>Спикеры</SLink>
+        </Breadcrumbs>
+        {loggedIn && (
+          <CartContainer $empty={!Boolean(draft)}>
+            {user && (
+              <>
+                <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                  Моя заявка
+                </Cart>
+                <Count>{draftSpeakersCount}</Count>
+              </>
+            )}
+          </CartContainer>
+        )}
+      </FirstLine>
       <SearchContainer>
         <input
           placeholder="Введите название компании"
@@ -70,32 +100,65 @@ const SpeakersPage: React.FC = () => {
       </SearchContainer>
 
       {speakers[0] ? (
-        <SpeakersContainer>
-          {speakers.map((speaker) => {
-            return (
-              (speaker.organization?.toLocaleLowerCase().includes(company.toLocaleLowerCase()) ||
-                (!company && !speaker.organization)) && (
-                <SpeakerCard key={speaker.id}>
-                  <LinkToSpeaker to={`/speakers/${speaker.id}`}>
-                    <ImageContainer>
-                      <Avatar src={speaker.avatarImg} />
-                    </ImageContainer>
-                    <Content>
-                      <Name>{speaker.name}</Name>
-                      <Info>{speaker.organization}</Info>
-                    </Content>
-                  </LinkToSpeaker>
-                </SpeakerCard>
-              )
-            )
-          })}
-        </SpeakersContainer>
+        <Speakers company={company} speakers={speakers} />
       ) : (
         <NotFound>{!loading && 'Спикеры не найдены'}</NotFound>
       )}
     </Container>
   )
 }
+
+const CartContainer = styled.div<{ $empty: boolean }>`
+  display: flex;
+
+  ${(p) =>
+    p.$empty &&
+    `
+    opacity: 0.4;
+  `}
+`
+
+const Count = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: #5dc2ff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  top: -10px;
+  left: -20px;
+  z-index: 2;
+`
+
+const FirstLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Cart = styled(Link)<{ $disabled: boolean }>`
+  display: flex;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 15px;
+  border: 1px solid #d5d5d5;
+  gap: 10px;
+  width: fit-content;
+  z-index: 1;
+  color: #000;
+
+  &:hover {
+    border: 1px solid #878787;
+  }
+
+  ${(p) =>
+    p.$disabled &&
+    `
+    pointer-events: none;
+  `}
+`
 
 const NotFound = styled.div`
   text-align: center;
@@ -150,81 +213,6 @@ const SearchContainer = styled.div`
     &:active:not(:disabled) {
       background: #d1d1d1;
     }
-  }
-`
-
-const Info = styled.div`
-  color: #00ddff;
-  height: 18px;
-`
-
-const Name = styled.div`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  color: #000;
-  text-overflow: ellipsis;
-  font-family: Roboto;
-  font-size: 26px;
-  font-style: normal;
-  font-weight: 500;
-  padding: 0 0 8px 0;
-  text-align: center;
-`
-
-const Avatar = styled.img`
-  width: 100%;
-  transition: transform 0.3s ease-out;
-  background: #afadb5;
-`
-
-const Content = styled.div`
-  display: flex;
-  margin-top: 10px;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`
-
-const ImageContainer = styled.div`
-  display: flex;
-  height: 170px;
-  width: 170px;
-  overflow: hidden;
-  border-radius: 50%;
-  margin: 0;
-`
-
-const LinkToSpeaker = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  text-decoration: inherit;
-  width: 220px;
-  align-items: center;
-`
-
-const SpeakerCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    ${Avatar} {
-      transform: scale(1.16);
-    }
-  }
-`
-
-const SpeakersContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 30px 0;
-  gap: 60px;
-
-  @media (max-width: 751px) {
-    justify-content: center;
   }
 `
 

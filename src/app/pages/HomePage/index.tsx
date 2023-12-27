@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 const HomePage: React.FC = () => {
   const titleRef = createRef<HTMLDivElement>()
   const bannerRef = createRef<HTMLDivElement>()
-
+  
   useEffect(() => {
     const title = titleRef.current
     const banner = bannerRef.current

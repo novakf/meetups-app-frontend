@@ -1,4 +1,4 @@
-export type MeetupStatusType = 'черновик' | 'удален' | 'сформирован' | 'завершен' | 'отклонен'
+export type MeetupStatusType = 'черновик' | 'удален' | 'сформирован' | 'утвержден' | 'отклонен'
 
 export type SpeakerStatusType = 'активный' | 'удален'
 
@@ -30,6 +30,7 @@ export type SpeakerType = {
   status: SpeakerStatusType
   organization?: string
   description: string
+  MeetupsSpeakers?: MeetupsSpeakersType
 }
 
 export type MeetupsSpeakersType = {
@@ -39,4 +40,14 @@ export type MeetupsSpeakersType = {
   endsAt?: string
   reportTheme?: string
   reportDescription?: string
+}
+
+export type UserType = {
+  id: number
+  name: string
+  phone?: string
+  email: string
+  password: string
+  avatarImg?: string
+  role: UserRoleType
 }

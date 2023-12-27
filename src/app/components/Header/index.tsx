@@ -1,15 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import logo from '../../assets/logo-bmstu.png'
 import PopupForm from '../PopupForm'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
+import { setUserDataAction, userData } from '../../store/slices/userSlice'
+import UserContainer from './components/UserContainer'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
+import GenericMessage from '../Message'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  const [status, setStatus] = useState('')
+  const [message, setMessage] = useState(false)
+  const [messageText, setMessageText] = useState('')
+
+  const user = userData()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        dispatch(setUserDataAction(res.data))
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log('UserInfoError', error)
+        setLoading(false)
+      })
+  }, [])
+
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    message && setTimeout(() => setMessage(false), 3000)
+  }, [message])
 
   return (
     <Container>
@@ -21,26 +58,67 @@ const Header: React.FC = () => {
           </Logo>
           <Column>|</Column>
           <Links>
-            <Link to="/speakers">Спикеры</Link>
+            <Tab>
+              <Link to={'/speakers'}>Спикеры</Link>
+              <Border $isActive={'/speakers' == pathname} />
+            </Tab>
+            {user && user.id !== -1 && (
+              <Tab>
+                <Link to={'/profile/meetups'}>{user.role == 'модератор' ? 'Текущие заявки' : 'Мои заявки'}</Link>
+                <Border $isActive={'/profile/meetups' == pathname} />
+              </Tab>
+            )}
           </Links>
         </Left>
-        <Action>
-          <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
-          <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
-        </Action>
+
+        {!loading &&
+          (user && user.id !== -1 ? (
+            <UserContainer user={user} setMessage={setMessage} setMessageText={setMessageText} setStatus={setStatus} />
+          ) : (
+            <Action>
+              <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
+              <SignupButton onClick={() => setSignupOpen(true)}>Создать аккаунт</SignupButton>
+            </Action>
+          ))}
 
         <BurgerMenu>
-        <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
-          <BurgerMenuIcon />
-        </StyledBurgerMenuIcon>
-        <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
-      </BurgerMenu>
+          <StyledBurgerMenuIcon $open={modalMenuOpen} onClick={() => setModalMenuOpen(!modalMenuOpen)}>
+            <BurgerMenuIcon />
+          </StyledBurgerMenuIcon>
+          <ModalMenu open={modalMenuOpen} onClose={() => setModalMenuOpen(false)} />
+        </BurgerMenu>
       </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
+      <GenericMessage status={status} open={message} text={messageText} />
     </Container>
   )
 }
+
+const Tab = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`
+
+const Border = styled.div<{
+  $isActive: boolean
+}>`
+  margin-top: 15px;
+  height: 1px;
+  width: 100%;
+  border-bottom: 2px solid #004dff59;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transition: all 0.3s;
+
+  ${(props) =>
+    props.$isActive &&
+    `
+    opacity: 1;
+    `};
+`
 
 const StyledBurgerMenuIcon = styled.div<{ $open: boolean }>`
   transition: all 0.2s;
