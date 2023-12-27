@@ -6,7 +6,7 @@ import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
 import { SpeakerType } from '../../types'
 import axios from 'axios'
-import { userData } from '../../store/slices/userSlice'
+import { isLoggedIn, userData } from '../../store/slices/userSlice'
 import Speakers from './components/Speakers'
 import { useDispatch } from 'react-redux'
 import { draftData, setDraftDataAction } from '../../store/slices/draftSlice'
@@ -24,6 +24,7 @@ const SpeakersPage: React.FC = () => {
   const dispatch = useDispatch()
   const user = userData()
   const draft = draftData()
+  const loggedIn = isLoggedIn()
 
   useEffect(() => {
     setLoading(true)
@@ -68,16 +69,18 @@ const SpeakersPage: React.FC = () => {
           <SLink to={'/'}>Домашняя страница</SLink>
           <SLink to={'/speakers'}>Спикеры</SLink>
         </Breadcrumbs>
-        <CartContainer $empty={!Boolean(draft)}>
-          {user && (
-            <>
-              <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
-                Моя заявка
-              </Cart>
-              <Count>{draftSpeakersCount}</Count>
-            </>
-          )}
-        </CartContainer>
+        {loggedIn && (
+          <CartContainer $empty={!Boolean(draft)}>
+            {user && (
+              <>
+                <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                  Моя заявка
+                </Cart>
+                <Count>{draftSpeakersCount}</Count>
+              </>
+            )}
+          </CartContainer>
+        )}
       </FirstLine>
       <SearchContainer>
         <input

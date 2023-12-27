@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SingleSpeakerPage from './pages/SingleSpeakerPage'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
-import MeetupPage from './pages/MeetupPage'
+import DraftPage from './pages/DraftPage'
 
 const App: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/speakers" element={<SpeakersPage />} />
         <Route path="/speakers/:id" element={<SingleSpeakerPage />} />
-        <Route path="/profile/draft" element={<MeetupPage isDraft/>} />
+        <Route path="/profile/draft" element={<DraftPage />} />
       </Routes>
     </BrowserRouter>
   )

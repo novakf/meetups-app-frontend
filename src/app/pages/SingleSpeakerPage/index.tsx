@@ -6,7 +6,7 @@ import speakersMock from '../../mocks/speakers'
 import { SpeakerType } from '../../types'
 import axios from 'axios'
 import { draftData } from '../../store/slices/draftSlice'
-import { userData } from '../../store/slices/userSlice'
+import { isLoggedIn, userData } from '../../store/slices/userSlice'
 
 const SingleSpeakerPage: React.FC = () => {
   const [response, setResponse] = useState(false)
@@ -18,10 +18,12 @@ const SingleSpeakerPage: React.FC = () => {
 
   const draft = draftData()
   const user = userData()
+  const loggedIn = isLoggedIn()
 
   useEffect(() => {
     setLoading(true)
-    axios.get(`http://localhost:3001/speakers/${speakerId}`)
+    axios
+      .get(`http://localhost:3001/speakers/${speakerId}`)
       .then((response) => {
         if (response) {
           setResponse(true)
@@ -49,16 +51,18 @@ const SingleSpeakerPage: React.FC = () => {
           <SLink to={'/speakers'}>Спикеры</SLink>
           <SLink to={'/speakers/'}>{currentSpeaker.name}</SLink>
         </Breadcrumbs>
-        <CartContainer $empty={!Boolean(draft)}>
-          {user && (
-            <>
-              <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
-                Моя заявка
-              </Cart>
-              <Count>{draftSpeakersCount}</Count>
-            </>
-          )}
-        </CartContainer>
+        {loggedIn && (
+          <CartContainer $empty={!Boolean(draft)}>
+            {user && (
+              <>
+                <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                  Моя заявка
+                </Cart>
+                <Count>{draftSpeakersCount}</Count>
+              </>
+            )}
+          </CartContainer>
+        )}
       </FirstLine>
       <SpeakerContainer>
         <Banner>

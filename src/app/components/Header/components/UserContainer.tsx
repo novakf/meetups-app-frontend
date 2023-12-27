@@ -4,9 +4,20 @@ import { UserType } from '../../../types'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUserDataAction } from '../../../store/slices/userSlice'
+import { useNavigate } from 'react-router-dom'
+import { setDraftDataAction } from '../../../store/slices/draftSlice'
 
-const UserContainer: React.FC<UserType> = (user) => {
+type Props = {
+  user: UserType
+  setMessage: (value: boolean) => void
+  setMessageText: (value: string) => void
+  setStatus: (value: string) => void
+}
+
+const UserContainer: React.FC<Props> = ({ user, setMessage, setMessageText, setStatus }) => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const exitAccount = () => {
     axios
@@ -17,6 +28,11 @@ const UserContainer: React.FC<UserType> = (user) => {
       })
       .then(() => {
         dispatch(setUserDataAction(undefined))
+        dispatch(setDraftDataAction(undefined))
+        navigate('/speakers')
+        setMessage(true)
+        setMessageText('Вы успешно вышли из аккаунта')
+        setStatus('success')
       })
       .catch(function (error) {
         console.log('UserLogoutError', error)

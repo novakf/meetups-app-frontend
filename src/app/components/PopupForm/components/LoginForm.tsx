@@ -1,8 +1,9 @@
 import axios from 'axios'
-import React, { KeyboardEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
+import { handleKeyPress } from '../../../utils'
 
 type Props = {
   setError: (value: boolean) => void
@@ -50,12 +51,6 @@ const LoginForm: React.FC<Props> = ({ setError, setMessage, setMessageText, setS
         setMessageText(error.response.data.message)
         setStatus('error')
       })
-  }
-
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      return (e.target as HTMLElement).blur()
-    }
   }
 
   return (

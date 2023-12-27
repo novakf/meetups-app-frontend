@@ -20,7 +20,7 @@ const initialState = {
 
 const dataSlice = createSlice({
   name: 'user',
-  initialState: { Data: initialState },
+  initialState: { Data: initialState, },
   reducers: {
     setData(state, { payload }) {
       state.Data = payload
@@ -29,7 +29,7 @@ const dataSlice = createSlice({
 })
 
 export const userData = () => useSelector((state: State) => state.userInfo.Data)
-export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data?.id !== -1 || !state.userInfo.Data)
+export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data?.id !== -1)
 
 export const { setData: setUserDataAction } = dataSlice.actions
 

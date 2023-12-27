@@ -5,10 +5,11 @@ import PopupForm from '../PopupForm'
 import { Link, useLocation } from 'react-router-dom'
 import BurgerMenuIcon from '../../icons/BurgerMenuIcon'
 import ModalMenu from './components/ModalMenu'
-import { isLoggedIn, setUserDataAction, userData } from '../../store/slices/userSlice'
+import { setUserDataAction, userData } from '../../store/slices/userSlice'
 import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
+import GenericMessage from '../Message'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
@@ -16,8 +17,11 @@ const Header: React.FC = () => {
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  const [status, setStatus] = useState('')
+  const [message, setMessage] = useState(false)
+  const [messageText, setMessageText] = useState('')
+
   const user = userData()
-  const loggedIn = isLoggedIn()
 
   const dispatch = useDispatch()
 
@@ -38,29 +42,11 @@ const Header: React.FC = () => {
       })
   }, [])
 
-  const pageLinks = [
-    {
-      key: 1,
-      url: '/speakers',
-      label: 'Спикеры',
-    },
-    loggedIn
-      ? {
-          key: 2,
-          url: '/profile/meetups',
-          label: 'Мои митапы',
-        }
-      : {},
-    loggedIn
-      ? {
-          key: 3,
-          url: '/profile/draft',
-          label: 'Черновик',
-        }
-      : {},
-  ]
-
   const { pathname } = useLocation()
+
+  useEffect(() => {
+    message && setTimeout(() => setMessage(false), 3000)
+  }, [message])
 
   return (
     <Container>
@@ -72,22 +58,22 @@ const Header: React.FC = () => {
           </Logo>
           <Column>|</Column>
           <Links>
-            {pageLinks.map((el) => {
-              return (
-                el.url && (
-                  <Tab key={el.key}>
-                    <Link to={el.url}>{el.label}</Link>
-                    <Border $isActive={el.url == pathname} />
-                  </Tab>
-                )
-              )
-            })}
+            <Tab>
+              <Link to={'/speakers'}>Спикеры</Link>
+              <Border $isActive={'/speakers' == pathname} />
+            </Tab>
+            {user && user.id !== -1 && (
+              <Tab>
+                <Link to={'/profile/meetups'}>Мои митапы</Link>
+                <Border $isActive={'/profile/meetups' == pathname} />
+              </Tab>
+            )}
           </Links>
         </Left>
 
         {!loading &&
           (user && user.id !== -1 ? (
-            <UserContainer {...user} />
+            <UserContainer user={user} setMessage={setMessage} setMessageText={setMessageText} setStatus={setStatus} />
           ) : (
             <Action>
               <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
@@ -104,6 +90,7 @@ const Header: React.FC = () => {
       </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
+      <GenericMessage status={status} open={message} text={messageText} />
     </Container>
   )
 }

@@ -30,6 +30,7 @@ export type SpeakerType = {
   status: SpeakerStatusType
   organization?: string
   description: string
+  MeetupsSpeakers?: MeetupsSpeakersType
 }
 
 export type MeetupsSpeakersType = {
