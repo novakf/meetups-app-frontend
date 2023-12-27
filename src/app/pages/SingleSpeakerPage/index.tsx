@@ -138,6 +138,10 @@ const Cart = styled(Link)<{ $disabled: boolean }>`
   z-index: 1;
   color: #000;
 
+  &:hover {
+    border: 1px solid #878787;
+  }
+
   ${(p) =>
     p.$disabled &&
     `
