@@ -72,7 +72,7 @@ const SpeakersPage: React.FC = () => {
           <CartContainer $empty={!Boolean(draft)}>
             {user && (
               <>
-                <Cart to={`/profile/meetups/${draft.id}`} $disabled={!Boolean(draft)}>
+                <Cart to={`/profile/meetups/${draft?.id}`} $disabled={!Boolean(draft)}>
                   Моя заявка
                 </Cart>
                 <Count>{draftSpeakersCount}</Count>

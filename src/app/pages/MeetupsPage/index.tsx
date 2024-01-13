@@ -7,18 +7,32 @@ import { MeetupsType } from '../../types'
 import MultiDropdown from '../../components/MultiDropdown'
 import { userData } from '../../store/slices/userSlice'
 import { useDispatch } from 'react-redux'
-import { filterData, setEndDataAction, setFilterDataAction, setStartDataAction } from '../../store/slices/meetupsFilterSlice'
+import {
+  filterData,
+  setEndDataAction,
+  setFilterDataAction,
+  setStartDataAction,
+} from '../../store/slices/meetupsFilterSlice'
 
 const MeetupsPage: React.FC = () => {
   const filter = filterData()
   const [meetups, setMeetups] = useState<MeetupsType[]>([])
 
+  const getStatus = () => {
+    let arr: string[] = []
+    filter.status.forEach((status: any) => arr.push(status.value))
+
+    return arr
+  }
+
   useEffect(() => {
     axios
-      .get('http://localhost:3001/meetups')
+      .get(`http://localhost:3001/meetups`, {
+        params: { status: getStatus(), startDate: filter.startDate, endDate: filter.endDate },
+      })
       .then((res) => setMeetups(res.data))
       .catch((err) => console.log(err))
-  }, [])
+  }, [filter])
 
   const options = [
     { key: 'Сформирован', value: 'сформирован' },
@@ -26,26 +40,7 @@ const MeetupsPage: React.FC = () => {
     { key: 'Утвержден', value: 'утвержден' },
   ]
 
-  const checkStatus = (status: string) => {
-    let fl = 0
-    filter.status.forEach((option: any) => {
-      if (option.value == status) fl = 1
-    })
-    return fl
-  }
-
   const defaultGetTitle = (elements: any) => elements.map((el: any) => el.key).join()
-
-  const dateCompare = (first: Date, second: Date) => {
-    if (first.getFullYear() > second.getFullYear()) return 1
-    if (first.getFullYear() < second.getFullYear()) return 0
-    if (first.getMonth() > second.getMonth()) return 1
-    if (first.getMonth() < second.getMonth()) return 0
-    if (first.getDate() > second.getDate()) return 1
-    if (first.getDate() < second.getDate()) return 0
-
-    return 0
-  }
 
   const user = userData()
   const dispatch = useDispatch()
@@ -107,25 +102,19 @@ const MeetupsPage: React.FC = () => {
           if (meetup.date) date = new Date(meetup.date)
           let created = dateCreate.toLocaleDateString('ru-RU')
           let dateStr = date.toLocaleDateString('ru-RU')
-
-          let start = new Date(filter.startDate)
-          let end = new Date(filter.endDate)
           return (
-            ((dateCompare(date, start) == 1 && dateCompare(end, date) == 1) || !filter.startDate || !filter.endDate) &&
-            (!filter.status.length || checkStatus(meetup.status) == 1) && (
-              <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
-                <Row $moder={user.role === 'модератор'}>
-                  <Cell>{++i}</Cell>
-                  {user.role === 'модератор' && <Cell style={{ textAlign: 'start' }}>{meetup.creatorLogin}</Cell>}
-                  <Cell style={{ textAlign: 'start' }}>{meetup.title}</Cell>
-                  <Cell style={{ textAlign: 'start' }}>{meetup.place}</Cell>
-                  <Cell>{meetup.speakers?.length}</Cell>
-                  <Cell>{dateStr}</Cell>
-                  <Cell>{created}</Cell>
-                  <Cell style={{ color: meetup.status == 'отклонен' ? '#d70000' : '#000' }}>{meetup.status}</Cell>
-                </Row>
-              </RowLink>
-            )
+            <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
+              <Row $moder={user.role === 'модератор'}>
+                <Cell>{++i}</Cell>
+                {user.role === 'модератор' && <Cell style={{ textAlign: 'start' }}>{meetup.creatorLogin}</Cell>}
+                <Cell style={{ textAlign: 'start' }}>{meetup.title}</Cell>
+                <Cell style={{ textAlign: 'start' }}>{meetup.place}</Cell>
+                <Cell>{meetup.speakers?.length}</Cell>
+                <Cell>{dateStr}</Cell>
+                <Cell>{created}</Cell>
+                <Cell style={{ color: meetup.status == 'отклонен' ? '#d70000' : '#000' }}>{meetup.status}</Cell>
+              </Row>
+            </RowLink>
           )
         })}
       </Table>
