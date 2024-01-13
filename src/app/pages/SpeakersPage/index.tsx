@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
 import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
@@ -10,12 +10,13 @@ import { isLoggedIn, userData } from '../../store/slices/userSlice'
 import Speakers from './components/Speakers'
 import { useDispatch } from 'react-redux'
 import { draftData, setDraftDataAction } from '../../store/slices/draftSlice'
+import { filterData, setCompanyDataAction } from '../../store/slices/speakersFilterSlice'
 
 const SpeakersPage: React.FC = () => {
-  let companyQuery = useLocation().search.split('company=')[1]
-    ? (useLocation().search.split('company=')[1] as string)
-    : ''
-  const [company, setCompany] = useState(companyQuery)
+  const filter = filterData()
+
+  let companyQuery = filter.company
+
   const [searchValue, setSearchValue] = useState(companyQuery)
   const [speakers, setSpeakers] = useState<SpeakerType[]>([])
   const [response, setResponse] = useState(false)
@@ -29,7 +30,7 @@ const SpeakersPage: React.FC = () => {
   useEffect(() => {
     setLoading(true)
     axios
-      .get(`http://localhost:3001/speakers/?company=${company}`, {
+      .get(`http://localhost:3001/speakers/?company=${filter.company}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,13 +50,12 @@ const SpeakersPage: React.FC = () => {
         console.log('SpeakersError', error)
         if (!response) setSpeakers(speakersMock)
       })
-  }, [])
+  }, [filter])
 
   const handleOrgEnter = (event: React.KeyboardEvent) => {
     let value = (event.target as HTMLInputElement).value
     if (event.key === 'Enter') {
-      setCompany(value)
-      window.location.href = `?company=${value}`
+      dispatch(setCompanyDataAction(value))
     }
   }
 
@@ -72,7 +72,7 @@ const SpeakersPage: React.FC = () => {
           <CartContainer $empty={!Boolean(draft)}>
             {user && (
               <>
-                <Cart to={'/profile/draft'} $disabled={!Boolean(draft)}>
+                <Cart to={`/profile/meetups/${draft.id}`} $disabled={!Boolean(draft)}>
                   Моя заявка
                 </Cart>
                 <Count>{draftSpeakersCount}</Count>
@@ -90,8 +90,7 @@ const SpeakersPage: React.FC = () => {
         />
         <button
           onClick={() => {
-            setCompany(searchValue)
-            window.location.href = `?company=${searchValue}`
+            dispatch(setCompanyDataAction(searchValue))
           }}
         >
           <SearchIcon />
@@ -99,7 +98,7 @@ const SpeakersPage: React.FC = () => {
       </SearchContainer>
 
       {speakers[0] ? (
-        <Speakers company={company} speakers={speakers} />
+        <Speakers company={filter.company} speakers={speakers} />
       ) : (
         <NotFound>{!loading && 'Спикеры не найдены'}</NotFound>
       )}
@@ -109,6 +108,7 @@ const SpeakersPage: React.FC = () => {
 
 const CartContainer = styled.div<{ $empty: boolean }>`
   display: flex;
+  margin-right: -25px;
 
   ${(p) =>
     p.$empty &&
@@ -147,7 +147,7 @@ const Cart = styled(Link)<{ $disabled: boolean }>`
   width: fit-content;
   z-index: 1;
   color: #000;
-
+  
   &:hover {
     border: 1px solid #878787;
   }
@@ -170,11 +170,12 @@ const SearchContainer = styled.div`
   padding: 30px 0;
   height: 50px;
   gap: 10px;
+  width: 100%;
 
   input {
     font-size: 16px;
     display: flex;
-    width: 100%;
+    width: 94%;
     align-items: center;
     gap: 8px;
     border: 0.5px solid #f1f1f1;

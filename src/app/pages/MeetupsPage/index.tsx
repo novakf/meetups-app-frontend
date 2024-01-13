@@ -7,11 +7,10 @@ import { MeetupsType } from '../../types'
 import MultiDropdown from '../../components/MultiDropdown'
 import { userData } from '../../store/slices/userSlice'
 import { useDispatch } from 'react-redux'
-import { filterData, setEndDataAction, setFilterDataAction, setStartDataAction } from '../../store/slices/filterSlice'
+import { filterData, setEndDataAction, setFilterDataAction, setStartDataAction } from '../../store/slices/meetupsFilterSlice'
 
 const MeetupsPage: React.FC = () => {
   const filter = filterData()
-
   const [meetups, setMeetups] = useState<MeetupsType[]>([])
 
   useEffect(() => {

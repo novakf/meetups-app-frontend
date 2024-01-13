@@ -5,11 +5,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Speaker from './Speaker'
 import { MeetupsType } from '../../types'
+import { draftData } from '../../store/slices/draftSlice'
+import DraftPage from '../DraftPage'
 
 const MeetupPage: React.FC = () => {
   const [meetup, setMeetup] = useState<MeetupsType | null>(null)
 
-  const id = useLocation().pathname.split('/')[3]
+  const id = Number(useLocation().pathname.split('/')[3])
+  const draft = draftData()
 
   const navigate = useNavigate()
 
@@ -20,7 +23,9 @@ const MeetupPage: React.FC = () => {
       .catch((err) => console.log(err))
   }, [])
 
-  return (
+  return id === draft.id ? (
+    <DraftPage />
+  ) : (
     <Container>
       <FirstLine>
         <Breadcrumbs>
@@ -44,7 +49,7 @@ const MeetupPage: React.FC = () => {
           {meetup?.speakers?.map((speaker) => {
             return <Speaker {...speaker} key={speaker.id} />
           })}
-          <SaveButton onClick={() => navigate('/profile/meetups')}>{"< Вернуться"}</SaveButton>
+          <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>
         </Constructor>
       ) : (
         <NotFound>Митап не найден</NotFound>

@@ -67,7 +67,7 @@ const DraftPage: React.FC = () => {
         <Breadcrumbs>
           <SLink to={'/'}>Домашняя страница</SLink>
           <SLink to={'/speakers'}>Спикеры</SLink>
-          <SLink to={'/profile/draft'}>Заявка на митап</SLink>
+          <SLink to={`/profile/meetups/${draft.id}`}>Заявка на митап</SLink>
         </Breadcrumbs>
       </FirstLine>
       {draft && userHasDraft ? (

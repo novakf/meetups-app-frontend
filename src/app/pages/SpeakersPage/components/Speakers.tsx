@@ -18,10 +18,26 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   const draft = draftData()
   const user = userData()
 
+  const getSpeakers = () => {
+    axios
+      .get(`http://localhost:3001/speakers/`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(() => {
+        //  dispatch(setDraftDataAction(res.data.meetup))
+      })
+      .catch((error) => {
+        console.log('SpeakersError', error)
+      })
+  }
+
   const addSpeaker = (id: number) => {
     axios
       .post(`http://localhost:3001/speakers/${id}`)
       .then((res) => {
+        getSpeakers()
         dispatch(setDraftDataAction(res.data))
       })
       .catch(function (error) {
@@ -33,6 +49,7 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
     axios
       .delete(`http://localhost:3001/meetups/speaker/${id}`)
       .then((res) => {
+        getSpeakers()
         dispatch(setDraftDataAction(res.data))
       })
       .catch(function (error) {

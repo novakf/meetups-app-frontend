@@ -8,7 +8,7 @@ const initialState = {
 }
 
 const dataSlice = createSlice({
-  name: 'filter',
+  name: 'meetupsFilter',
   initialState: { Data: initialState },
   reducers: {
     setStatusData(state, action) {
@@ -23,7 +23,7 @@ const dataSlice = createSlice({
   },
 })
 
-export const filterData = () => useSelector((state: any) => state.filterInfo.Data)
+export const filterData = () => useSelector((state: any) => state.meetupsFilterInfo.Data)
 
 export const {
   setStatusData: setFilterDataAction,

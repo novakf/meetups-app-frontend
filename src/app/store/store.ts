@@ -3,26 +3,34 @@ import userReducer from './slices/userSlice'
 import draftReducer from './slices/draftSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
-import filterReducer from './slices/filterSlice'
+import meetupsFilterReducer from './slices/meetupsFilterSlice'
+import speakersFilterReducer from './slices/speakersFilterSlice'
 
 const persistConfig = {
   key: 'root',
   storage,
 }
 
-const persistConfigFilter = {
+const persistMeetupsConfigFilter = {
   key: 'filter',
   storage,
 }
 
+const persistSpeakersConfigFilter = {
+  key: 'speakersFilter',
+  storage,
+}
+
 const persistedReducer = persistReducer(persistConfig, draftReducer)
-const persistedFilter = persistReducer(persistConfigFilter, filterReducer)
+const persistedMeetupsFilter = persistReducer(persistMeetupsConfigFilter, meetupsFilterReducer)
+const persistedSpeakersFilter = persistReducer(persistSpeakersConfigFilter, speakersFilterReducer)
 
 export const store = configureStore({
   reducer: combineReducers({
     userInfo: userReducer,
     draftInfo: persistedReducer,
-    filterInfo: persistedFilter,
+    meetupsFilterInfo: persistedMeetupsFilter,
+    speakersFilterInfo: persistedSpeakersFilter,
   }),
 
   middleware: (getDefaultMiddleware) =>
