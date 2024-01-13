@@ -51,8 +51,6 @@ const MeetupsPage: React.FC = () => {
   const user = userData()
   const dispatch = useDispatch()
 
-  console.log(filter)
-
   return (
     <Container>
       <FirstLine>

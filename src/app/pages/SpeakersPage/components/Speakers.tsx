@@ -23,7 +23,6 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
       .post(`http://localhost:3001/speakers/${id}`)
       .then((res) => {
         dispatch(setDraftDataAction(res.data))
-        console.log(res)
       })
       .catch(function (error) {
         console.log(error)
@@ -40,7 +39,6 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
         console.log(error)
       })
   }
-  console.log(user)
   return (
     <SpeakersContainer>
       {speakers.map((speaker) => {

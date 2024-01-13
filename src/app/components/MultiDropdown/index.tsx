@@ -46,7 +46,6 @@ const MultiDropdown: React.FC<MultiDropdownProps> = (props) => {
       else newValue = [...value, option]
     }
 
-    console.log(newValue)
     onChange(newValue)
   }
 

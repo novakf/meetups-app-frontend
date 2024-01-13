@@ -20,7 +20,6 @@ const Speaker: React.FC<SpeakerType> = (speaker) => {
         reportTheme,
       })
       .then((res) => {
-        console.log('res', res)
         dispatch(setDraftDataAction(res.data))
       })
       .catch((err) => console.log(err))

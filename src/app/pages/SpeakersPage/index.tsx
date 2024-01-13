@@ -41,7 +41,6 @@ const SpeakersPage: React.FC = () => {
         return response
       })
       .then((res) => {
-        console.log(res)
         setSpeakers(res.data.speakers)
         dispatch(setDraftDataAction(res.data.meetup))
         setLoading(false)

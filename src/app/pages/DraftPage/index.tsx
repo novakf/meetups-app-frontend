@@ -40,7 +40,6 @@ const DraftPage: React.FC = () => {
       })
       .then((res) => {
         dispatch(setDraftDataAction(res.data))
-        console.log('res', res)
       })
       .catch((err) => console.log(err))
   }

@@ -12,7 +12,6 @@ const dataSlice = createSlice({
   initialState: { Data: initialState },
   reducers: {
     setStatusData(state, action) {
-      console.log('act', action)
       state.Data.status = action.payload
     },
     setStartDateData(state, action) {
