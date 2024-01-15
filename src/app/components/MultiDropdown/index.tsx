@@ -74,12 +74,15 @@ const MultiDropdown: React.FC<MultiDropdownProps> = (props) => {
   return (
     <Select ref={selectRef} {...other}>
       <Input
+        style={{ caretColor: 'transparent', cursor: 'pointer' }}
         onClick={() => !disabled && setListIsOpen(true)}
         disabled={disabled}
         value={value.length !== 0 && !listIsOpen ? getTitle(value) : ''}
         onChange={() => {}}
         placeholder={getTitle(value) ? getTitle(value) : 'Выберите статус'}
-        afterSlot={<SArrowRight color="secondary" onClick={() => !disabled && setListIsOpen(true)} />}
+        afterSlot={
+          <SArrowRight color="secondary" onClick={() => !disabled && setListIsOpen(!listIsOpen)} $active={listIsOpen} />
+        }
       />
 
       <DropDown $active={listIsOpen}>
@@ -104,7 +107,7 @@ const DropDown = styled.div<{ $active: boolean }>`
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 230px;
-  width: 300px;
+  width: 326px;
   transition: all 0.3s;
   pointer-events: none;
 
@@ -118,21 +121,20 @@ const Select = styled.div`
   width: 300px;
   display: inline-flex;
   flex-direction: column;
-  gap: var(--space-xxs, 8px);
+  gap: 8px;
   flex-shrink: 0;
   cursor: pointer !important;
 `
 
 const OptionEl = styled.div<{ $active: boolean }>`
-  color: var(--text-primary, #000);
+  color: #000;
   font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 125% */
+  line-height: 20px;
   display: flex;
-  width: 100%;
-  padding: var(--space-s, 14px) var(--space-xs, 12px);
+  padding: 14px 12px;
   align-items: center;
   gap: var(--space-xxs, 8px);
   flex-shrink: 0;
@@ -144,8 +146,16 @@ const OptionEl = styled.div<{ $active: boolean }>`
   ${(p) => p.$active && `color: #157bff`}
 `
 
-const SArrowRight = styled(ArrowRight)`
+const SArrowRight = styled(ArrowRight)<{ $active: boolean }>`
   cursor: pointer;
+  transition: 0.3s;
+  margin-top: 4px;
+
+  ${(props) =>
+    props.$active &&
+    `
+    transform: rotate(90deg);
+  `}
 `
 
 export default MultiDropdown

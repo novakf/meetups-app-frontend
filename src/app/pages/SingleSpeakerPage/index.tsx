@@ -99,6 +99,7 @@ const SingleSpeakerPage: React.FC = () => {
 
 const CartContainer = styled.div<{ $empty: boolean }>`
   display: flex;
+  margin-right: -25px;
 
   ${(p) =>
     p.$empty &&

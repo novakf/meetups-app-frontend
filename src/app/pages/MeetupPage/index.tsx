@@ -23,7 +23,7 @@ const MeetupPage: React.FC = () => {
       .catch((err) => console.log(err))
   }, [])
 
-  return id === draft.id ? (
+  return id === draft?.id ? (
     <DraftPage />
   ) : (
     <Container>

@@ -67,7 +67,6 @@ const MeetupsPage: React.FC = () => {
             <StyledInput
               style={{ marginTop: '0px' }}
               type="date"
-              placeholder={'Дата проведения'}
               value={filter.startDate}
               onChange={(e) => dispatch(setStartDataAction(e.target.value))}
             />
@@ -77,7 +76,6 @@ const MeetupsPage: React.FC = () => {
             <StyledInput
               style={{ marginTop: '0px' }}
               type="date"
-              placeholder={'Дата проведения'}
               value={filter.endDate}
               onChange={(e) => dispatch(setEndDataAction(e.target.value))}
             />
