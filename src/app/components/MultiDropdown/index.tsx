@@ -12,7 +12,7 @@ export type MultiDropdownProps = {
   className?: string
   options: Option[]
   value: Option[]
-  onChange: (value: any) => void
+  onChange: (value: Option[]) => void
   disabled?: boolean
   getTitle: (value: Option[]) => string
 }

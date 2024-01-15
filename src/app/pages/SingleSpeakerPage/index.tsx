@@ -43,13 +43,13 @@ const SingleSpeakerPage: React.FC = () => {
 
   const draftSpeakersCount = draft?.speakers?.length
 
-  return currentSpeaker ? (
+  return (
     <Container>
       <FirstLine>
         <Breadcrumbs>
           <SLink to={'/'}>Домашняя страница</SLink>
           <SLink to={'/speakers'}>Спикеры</SLink>
-          <SLink to={'/speakers/'}>{currentSpeaker.name}</SLink>
+          <SLink to={'/speakers/'}>{currentSpeaker ? currentSpeaker.name : 'Неизвестный'}</SLink>
         </Breadcrumbs>
         {loggedIn && (
           <CartContainer $empty={!Boolean(draft)}>
@@ -64,35 +64,35 @@ const SingleSpeakerPage: React.FC = () => {
           </CartContainer>
         )}
       </FirstLine>
-      <SpeakerContainer>
-        <Banner>
-          <AvatarContainer>
-            <Avatar src={currentSpeaker.avatarImg} />
-          </AvatarContainer>
-          <MainInfo>
-            <Name>{currentSpeaker.name}</Name>
-            <CompanyName>{currentSpeaker.organization}</CompanyName>
-          </MainInfo>
-        </Banner>
-        <Info>
-          <About>
-            <Title>Обо мне</Title>
-            <Text>{currentSpeaker.description}</Text>
-          </About>
-          <Contacts>
-            <ContactsContainer>
-              <TitleSmall>Телефон:</TitleSmall>
-              <Text>{currentSpeaker.phone}</Text>
-              <TitleSmall>Почта:</TitleSmall>
-              <Email>{currentSpeaker.email}</Email>
-            </ContactsContainer>
-          </Contacts>
-        </Info>
-      </SpeakerContainer>
-    </Container>
-  ) : (
-    <Container>
-      <Error>{!loading && 'Спикер не найден'}</Error>
+      {currentSpeaker ? (
+        <SpeakerContainer>
+          <Banner>
+            <AvatarContainer>
+              <Avatar src={currentSpeaker.avatarImg} />
+            </AvatarContainer>
+            <MainInfo>
+              <Name>{currentSpeaker.name}</Name>
+              <CompanyName>{currentSpeaker.organization}</CompanyName>
+            </MainInfo>
+          </Banner>
+          <Info>
+            <About>
+              <Title>Обо мне</Title>
+              <Text>{currentSpeaker.description}</Text>
+            </About>
+            <Contacts>
+              <ContactsContainer>
+                <TitleSmall>Телефон:</TitleSmall>
+                <Text>{currentSpeaker.phone}</Text>
+                <TitleSmall>Почта:</TitleSmall>
+                <Email>{currentSpeaker.email}</Email>
+              </ContactsContainer>
+            </Contacts>
+          </Info>
+        </SpeakerContainer>
+      ) : (
+        <Error>{!loading && 'Спикер не найден'}</Error>
+      )}
     </Container>
   )
 }

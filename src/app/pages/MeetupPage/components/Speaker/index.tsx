@@ -1,16 +1,21 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
-import { SpeakerType } from '../../../types'
+import { SpeakerType } from '../../../../types'
 import axios from 'axios'
-import { setDraftDataAction } from '../../../store/slices/draftSlice'
+import { setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 
-const Speaker: React.FC<SpeakerType> = (speaker) => {
+type Props = {
+  speaker: SpeakerType
+  isDraft?: boolean
+}
+
+const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
   const [start, setStart] = useState(speaker.MeetupsSpeakers?.startsAt ? speaker.MeetupsSpeakers.startsAt : '')
   const [end, setEnd] = useState(speaker.MeetupsSpeakers?.endsAt ? speaker.MeetupsSpeakers.endsAt : '')
   const [title, setTitle] = useState(speaker.MeetupsSpeakers?.reportTheme ? speaker.MeetupsSpeakers.reportTheme : '')
 
-  const dispatch = useDispatch() 
+  const dispatch = useDispatch()
 
   const saveSpeaker = (id: number, startsAt: string, endsAt: string, reportTheme: string) => {
     axios
@@ -46,28 +51,39 @@ const Speaker: React.FC<SpeakerType> = (speaker) => {
           <SpeakerCompany>{speaker.organization}</SpeakerCompany>
         </Info>
       </SpeakerInfo>
-      <SpeakerForm id={`${speaker.id}`}>
-        <InputLabel style={{ marginTop: '0px' }}>Начало выступления</InputLabel>
-        <StyledInput type="time" value={start} onChange={(e) => setStart(e.target.value)} />
-        <InputLabel>Конец выступления</InputLabel>
-        <StyledInput type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
-        <InputLabel>Тема выступления</InputLabel>
-        <StyledInput
-          style={{ marginTop: '0px' }}
-          type="text"
-          placeholder="Тема"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Action>
-          <SaveButton type="button" onClick={() => saveSpeaker(speaker.id, start, end, title)}>
-            Сохранить
-          </SaveButton>
-          <DeleteButton type="button" onClick={() => deleteSpeaker(speaker.id)}>
-            Убрать
-          </DeleteButton>
-        </Action>
-      </SpeakerForm>
+      {isDraft ? (
+        <SpeakerForm id={`${speaker.id}`}>
+          <InputLabel style={{ marginTop: '0px' }}>Начало выступления</InputLabel>
+          <StyledInput type="time" value={start} onChange={(e) => setStart(e.target.value)} />
+          <InputLabel>Конец выступления</InputLabel>
+          <StyledInput type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
+          <InputLabel>Тема выступления</InputLabel>
+          <StyledInput
+            style={{ marginTop: '0px' }}
+            type="text"
+            placeholder="Тема"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Action>
+            <SaveButton type="button" onClick={() => saveSpeaker(speaker.id, start, end, title)}>
+              Сохранить
+            </SaveButton>
+            <DeleteButton type="button" onClick={() => deleteSpeaker(speaker.id)}>
+              Убрать
+            </DeleteButton>
+          </Action>
+        </SpeakerForm>
+      ) : (
+        <SpeakerForm id={`${speaker.id}`}>
+          <InputLabel style={{ marginTop: '0px' }}>Начало выступления</InputLabel>
+          <StyledInput value={speaker.MeetupsSpeakers?.startsAt} readOnly />
+          <InputLabel>Конец выступления</InputLabel>
+          <StyledInput value={speaker.MeetupsSpeakers?.endsAt} readOnly />
+          <InputLabel>Тема выступления</InputLabel>
+          <StyledInput value={speaker.MeetupsSpeakers?.reportTheme} readOnly />
+        </SpeakerForm>
+      )}
     </SpeakerContainer>
   )
 }

@@ -1,12 +1,10 @@
-@import "./constants.css";
-
 input {
   font-size: 16px;
   display: flex;
   width: 100%;
   height: 52px;
   align-items: center;
-  gap: var(--space-xxs);
+  gap: 8px;
   flex-shrink: 0;
   border: none;
   background: transparent;
@@ -21,20 +19,19 @@ input {
   display: flex;
   width: 100%;
   height: 52px;
-  padding: 0 var(--space-xs);
+  padding: 0 12px;
   align-items: center;
-  gap: var(--space-xxs);
+  gap: 8px;
   flex-shrink: 0;
   border-radius: 10px !important;
   border: 1px solid #c5c5c5;
-  background: var(--input-bg);
 
   &:not(:has(input:disabled)) {
     &:hover,
     &:focus {
-      border-radius: var(--border-radius);
+      border-radius: 0;
       outline: 1px solid #008fff;
-      background: var(--input-bg-focus, #fff);
+      background: #fff;
     }
   }
 

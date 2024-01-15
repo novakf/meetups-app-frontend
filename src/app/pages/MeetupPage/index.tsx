@@ -3,10 +3,10 @@ import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import Speaker from './Speaker'
+import Speaker from './components/Speaker'
 import { MeetupsType } from '../../types'
 import { draftData } from '../../store/slices/draftSlice'
-import DraftPage from '../DraftPage'
+import Draft from './components/Draft'
 
 const MeetupPage: React.FC = () => {
   const [meetup, setMeetup] = useState<MeetupsType | null>(null)
@@ -24,7 +24,7 @@ const MeetupPage: React.FC = () => {
   }, [])
 
   return id === draft?.id ? (
-    <DraftPage />
+    <Draft />
   ) : (
     <Container>
       <FirstLine>
@@ -47,7 +47,7 @@ const MeetupPage: React.FC = () => {
           <StyledInput>{meetup.description}</StyledInput>
           <InputLabelSpeakers>Участвующие спикеры</InputLabelSpeakers>
           {meetup?.speakers?.map((speaker) => {
-            return <Speaker {...speaker} key={speaker.id} />
+            return <Speaker speaker={speaker} key={speaker.id} />
           })}
           <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>
         </Constructor>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
-import Breadcrumbs from '../../components/Breadcrumbs'
+import Breadcrumbs from '../../../../components/Breadcrumbs'
 import { Link, useNavigate } from 'react-router-dom'
-import { draftData, hasDraft, setDraftDataAction } from '../../store/slices/draftSlice'
-import { handleKeyPress } from '../../utils'
+import { draftData, hasDraft, setDraftDataAction } from '../../../../store/slices/draftSlice'
+import { handleKeyPress } from '../../../../utils'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import Speaker from './Speaker'
-import GenericMessage from '../../components/Message'
+import Speaker from '../Speaker'
+import GenericMessage from '../../../../components/Message'
 
 const DraftPage: React.FC = () => {
   const draft = draftData()
@@ -106,7 +106,7 @@ const DraftPage: React.FC = () => {
           <InputLabelSpeakers>Выбранные спикеры</InputLabelSpeakers>
           {draft?.speakers && draft?.speakers.length > 0 ? (
             draft?.speakers?.map((speaker) => {
-              return <Speaker {...speaker} key={speaker.id} />
+              return <Speaker key={speaker.id} speaker={speaker} isDraft />
             })
           ) : (
             <NotFound>Вы еще не добавили спикеров</NotFound>
