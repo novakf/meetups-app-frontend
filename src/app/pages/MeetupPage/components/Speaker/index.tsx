@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { SpeakerType } from '../../../../types'
 import axios from 'axios'
-import { setDraftDataAction } from '../../../../store/slices/draftSlice'
+import { draftData, setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
 }
 
 const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
+  const draft = draftData()
   const [start, setStart] = useState(speaker.MeetupsSpeakers?.startsAt ? speaker.MeetupsSpeakers.startsAt : '')
   const [end, setEnd] = useState(speaker.MeetupsSpeakers?.endsAt ? speaker.MeetupsSpeakers.endsAt : '')
   const [title, setTitle] = useState(speaker.MeetupsSpeakers?.reportTheme ? speaker.MeetupsSpeakers.reportTheme : '')
@@ -30,12 +31,21 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
       .catch((err) => console.log(err))
   }
 
+  const getDraft = () => {
+    axios
+      .get(`http://localhost:3001/meetups/${draft.id}`)
+      .then((res) => {
+        dispatch(setDraftDataAction(res.data))
+      })
+      .catch((err) => console.log(err))
+  }
+
   const deleteSpeaker = (id: number) => {
     axios
       .delete(`http://localhost:3001/meetups/speaker/${id}`)
       .then((res) => {
         dispatch(setDraftDataAction(res.data))
-        console.log(res)
+        getDraft()
       })
       .catch((err) => console.log(err))
   }
