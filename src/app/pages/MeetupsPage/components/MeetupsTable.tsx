@@ -48,18 +48,20 @@ const MeetupsTable: React.FC = () => {
         let created = dateCreate.toLocaleDateString('ru-RU')
         let dateStr = date.toLocaleDateString('ru-RU')
         return (
-          <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
-            <Row $moder={user.role === 'модератор'}>
-              <Cell>{++i}</Cell>
-              {user.role === 'модератор' && <Cell style={{ textAlign: 'start' }}>{meetup.creatorLogin}</Cell>}
-              <Cell style={{ textAlign: 'start' }}>{meetup.title}</Cell>
-              <Cell style={{ textAlign: 'start' }}>{meetup.place}</Cell>
-              <Cell>{meetup.speakers?.length}</Cell>
-              <Cell>{dateStr}</Cell>
-              <Cell>{created}</Cell>
-              <Cell style={{ color: meetup.status == 'отклонен' ? '#d70000' : '#000' }}>{meetup.status}</Cell>
-            </Row>
-          </RowLink>
+          meetup.creatorLogin?.toLocaleLowerCase().includes(filter.organizator.toLocaleLowerCase()) && (
+            <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
+              <Row $moder={user.role === 'модератор'}>
+                <Cell>{++i}</Cell>
+                {user.role === 'модератор' && <Cell style={{ textAlign: 'start' }}>{meetup.creatorLogin}</Cell>}
+                <Cell style={{ textAlign: 'start' }}>{meetup.title}</Cell>
+                <Cell style={{ textAlign: 'start' }}>{meetup.place}</Cell>
+                <Cell>{meetup.speakers?.length}</Cell>
+                <Cell>{dateStr}</Cell>
+                <Cell>{created}</Cell>
+                <Cell style={{ color: meetup.status == 'отклонен' ? '#d70000' : '#000' }}>{meetup.status}</Cell>
+              </Row>
+            </RowLink>
+          )
         )
       })}
     </Table>
