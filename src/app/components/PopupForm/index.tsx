@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from '../Modal'
 import { styled } from 'styled-components'
 import robot from '../../assets/robot.png'
@@ -23,10 +23,6 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
   const [status, setStatus] = useState('')
   const [message, setMessage] = useState(false)
   const [messageText, setMessageText] = useState('')
-
-  useEffect(() => {
-    message && setTimeout(() => setMessage(false), 3000)
-  }, [message])
 
   return (
     <>
@@ -82,7 +78,7 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
           </Right>
         </Content>
       </Modal>
-      <GenericMessage status={status} open={message} text={messageText} />
+      <GenericMessage status={status} open={message} text={messageText} setOpen={setMessage} />
     </>
   )
 }

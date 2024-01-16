@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import { Link, useNavigate } from 'react-router-dom'
@@ -22,10 +22,6 @@ const DraftPage: React.FC = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    message && setTimeout(() => setMessage(false), 3000)
-  }, [message])
 
   const save = () => {
     axios
@@ -137,7 +133,7 @@ const DraftPage: React.FC = () => {
       ) : (
         <NotFound>Черновик не найден, вернитесь на страницу спикеров</NotFound>
       )}
-      <GenericMessage status={status} open={message} text={messageText} />
+      <GenericMessage status={status} open={message} text={messageText} setOpen={setMessage} />
     </Container>
   )
 }

@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
+import { MeetupsType } from '../../types'
 
-const initialState = {
+const initialState: MeetupsType = {
   id: -1,
   status: '',
   date: '',

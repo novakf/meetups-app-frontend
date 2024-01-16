@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
+import { UserType } from '../../types'
 
-const initialState = {
+const initialState: UserType = {
   id: -1,
   name: '',
   phone: '',
