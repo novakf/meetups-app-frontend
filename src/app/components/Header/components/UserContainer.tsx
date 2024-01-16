@@ -6,15 +6,13 @@ import { useDispatch } from 'react-redux'
 import { setUserDataAction } from '../../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 import { setDraftDataAction } from '../../../store/slices/draftSlice'
+import { setMessage } from '../../../utils'
 
 type Props = {
   user: UserType
-  setMessage: (value: boolean) => void
-  setMessageText: (value: string) => void
-  setStatus: (value: string) => void
 }
 
-const UserContainer: React.FC<Props> = ({ user, setMessage, setMessageText, setStatus }) => {
+const UserContainer: React.FC<Props> = ({ user }) => {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -30,9 +28,8 @@ const UserContainer: React.FC<Props> = ({ user, setMessage, setMessageText, setS
         dispatch(setUserDataAction(undefined))
         dispatch(setDraftDataAction(undefined))
         navigate('/speakers')
-        setMessage(true)
-        setMessageText('Вы успешно вышли из аккаунта')
-        setStatus('success')
+
+        setMessage({ messageText: 'Вы успешно вышли из аккаунта' }, dispatch)
       })
       .catch(function (error) {
         console.log('UserLogoutError', error)

@@ -4,7 +4,8 @@ import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import axios from 'axios'
 import GenericFileUpload from './components/GenericFileUpload'
-import GenericMessage from '../../components/Message'
+import { setMessage } from '../../utils'
+import { useDispatch } from 'react-redux'
 
 type Props = {
   isNew?: boolean
@@ -32,13 +33,10 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
   const [currentSpeaker, setCurrentSpeaker] = useState<Speaker>(SpeakerInitial)
   const [avatar, setAvatar] = useState<File>()
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const speakerId = Number(location.pathname.split('/')[3])
-
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
 
   useEffect(() => {
     !props.isNew && getSpeaker(speakerId)
@@ -73,6 +71,7 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
       })
       .then(() => {
         navigate('/speakers/moderation')
+        setMessage({ messageText: 'Спикер успешно добавлен' }, dispatch)
       })
       .catch((error) => {
         console.log('AddSpeakerError', error)
@@ -96,9 +95,7 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
       })
       .then(() => {
         getSpeaker(speakerId)
-        setMessage(true)
-        setMessageText('Данные успешно сохранены')
-        setStatus('success')
+        setMessage({ messageText: 'Данные успешно сохранены' }, dispatch)
       })
       .catch((error) => {
         console.log('AddSpeakerError', error)
@@ -164,7 +161,6 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
           )}
         </Form>
       </SpeakerContainer>
-      <GenericMessage status={status} open={message} text={messageText} setOpen={setMessage}/>
     </Container>
   )
 }

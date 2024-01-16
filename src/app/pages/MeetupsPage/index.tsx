@@ -81,7 +81,7 @@ const MeetupsPage: React.FC = () => {
 }
 
 const UserInput = styled.input`
-  width: 320px;
+  width: 300px;
   height: 52px;
   border-radius: 10px !important;
   border: 1px solid #c5c5c5;

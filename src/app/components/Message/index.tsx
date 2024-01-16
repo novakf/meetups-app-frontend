@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import SuccessIcon from '../../icons/SuccessIcon'
 import ErrorIcon from '../../icons/ErrorIcon'
@@ -8,20 +8,15 @@ type Props = {
   status?: string
   open: boolean
   text: string
-  setOpen: (val: boolean) => void
 }
 
-const GenericMessage: React.FC<Props> = ({ status = 'info', ...props }) => {
-  useEffect(() => {
-    props.open && setTimeout(() => props.setOpen(false), 3000)
-  }, [props.open])
-
+const GenericMessage: React.FC<Props> = (props) => {
   return (
     <Container>
       <MessageBox $open={props.open}>
-        {status === 'success' && <SuccessIcon style={{ marginRight: '10px' }} />}
-        {status === 'error' && <ErrorIcon style={{ marginRight: '10px' }} />}
-        {status === 'info' && <InfoIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'success' && <SuccessIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'error' && <ErrorIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'info' && <InfoIcon style={{ marginRight: '10px' }} />}
         {props.text}
       </MessageBox>
     </Container>

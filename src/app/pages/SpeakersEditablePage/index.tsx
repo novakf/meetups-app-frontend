@@ -6,14 +6,13 @@ import axios from 'axios'
 import { SpeakerType } from '../../types'
 import BinIcon from '../../icons/BinIcon'
 import PlusIcon from '../../icons/PlusIcon'
-import GenericMessage from '../../components/Message'
+import { setMessage } from '../../utils'
+import { useDispatch } from 'react-redux'
 
 const SpeakersEditablePage: React.FC = () => {
   const [speakers, setSpeakers] = useState<SpeakerType[]>([])
 
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
+  const dispatch = useDispatch()
 
   useEffect(() => {
     axios
@@ -39,9 +38,7 @@ const SpeakersEditablePage: React.FC = () => {
       })
       .then((res) => {
         setSpeakers(res.data.speakers)
-        setMessage(true)
-        setMessageText('Спикер успешно удален')
-        setStatus('success')
+        setMessage({ messageText: 'Спикер успешно удален' }, dispatch)
       })
       .catch((error) => {
         console.log('SpeakersError', error)
@@ -102,7 +99,6 @@ const SpeakersEditablePage: React.FC = () => {
           </RowLink>
         ))}
       </Table>
-      <GenericMessage status={status} open={message} text={messageText} setOpen={setMessage}/>
     </Container>
   )
 }

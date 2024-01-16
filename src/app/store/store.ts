@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 import meetupsFilterReducer from './slices/meetupsFilterSlice'
 import speakersFilterReducer from './slices/speakersFilterSlice'
+import messageReducer from './slices/messageSlice'
 
 const persistConfig = {
   key: 'root',
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   draftInfo: persistedReducer,
   meetupsFilterInfo: persistedMeetupsFilter,
   speakersFilterInfo: persistedSpeakersFilter,
+  messageInfo: messageReducer
 })
 
 export const store = configureStore({

@@ -10,6 +10,7 @@ import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import GenericMessage from '../Message'
+import { messageData } from '../../store/slices/messageSlice'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
@@ -17,9 +18,7 @@ const Header: React.FC = () => {
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
+  const message = messageData()
 
   const user = userData()
 
@@ -75,7 +74,7 @@ const Header: React.FC = () => {
 
         {!loading &&
           (user && user.id !== -1 ? (
-            <UserContainer user={user} setMessage={setMessage} setMessageText={setMessageText} setStatus={setStatus} />
+            <UserContainer user={user} />
           ) : (
             <Action>
               <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
@@ -92,7 +91,7 @@ const Header: React.FC = () => {
       </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
-      <GenericMessage status={status} open={message} text={messageText} setOpen={setMessage}/>
+      <GenericMessage status={message.status} open={message.message} text={message.messageText} />
     </Container>
   )
 }
