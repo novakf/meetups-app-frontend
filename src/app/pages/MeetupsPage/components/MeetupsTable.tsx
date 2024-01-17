@@ -8,7 +8,7 @@ import { filterData } from '../../../store/slices/meetupsFilterSlice'
 import RejectIcon from '../../../icons/RejectIcon'
 import AcceptIcon from '../../../icons/AcceptIcon'
 import { useDispatch } from 'react-redux'
-import { setMessage } from '../../../utils'
+import { setMessage, useInterval } from '../../../utils'
 import Tooltip from '../../../components/Tooltip'
 
 const MeetupsTable: React.FC = () => {
@@ -18,6 +18,7 @@ const MeetupsTable: React.FC = () => {
   const dispatch = useDispatch()
 
   const [meetups, setMeetups] = useState<MeetupsType[]>([])
+  // const [fetch, setFetch] = useState(true)
 
   const getStatus = () => {
     let arr: string[] = []
@@ -28,7 +29,9 @@ const MeetupsTable: React.FC = () => {
 
   useEffect(() => {
     getMeetups()
-  }, [filter.startDate || filter.endDate || filter.status])
+  }, [filter.status, filter.endDate, filter.startDate])
+
+  useInterval(() => getMeetups(), 2000)
 
   const getMeetups = () => {
     axios
@@ -218,13 +221,13 @@ const Row = styled.div<{ $moder: boolean }>`
   &:hover {
     background: #f1f1f1;
 
-    ${ActionCell} > div {
-      opacity: 0;
-    }
-
-    ${ButtonGroup} {
-      opacity: 1 !important;
-    }
+    //    ${ActionCell} > div {
+    //      opacity: 0;
+    //    }
+    //
+    //    ${ButtonGroup} {
+    //      opacity: 1 !important;
+    //    }
   }
 
   ${(p) =>
