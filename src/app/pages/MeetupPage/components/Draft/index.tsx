@@ -44,6 +44,16 @@ const DraftPage: React.FC = () => {
       .catch((err) => console.log(err))
   }
 
+  const deleteMeetup = () => {
+    axios
+      .put('http://localhost:3001/meetups/delete')
+      .then(() => {
+        dispatch(setDraftDataAction(undefined))
+        navigate('/profile/meetups')
+      })
+      .catch((err) => console.log(err))
+  }
+
   const submit = () => {
     axios
       .put('http://localhost:3001/meetups/complete/creator/')
@@ -72,52 +82,57 @@ const DraftPage: React.FC = () => {
       </FirstLine>
       {draft && userHasDraft ? (
         <Constructor>
-          <InputLabel>Заголовок</InputLabel>
-          <StyledInput
-            type="text"
-            placeholder={'Название мероприятия'}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onKeyDown={(e) => handleKeyPress(e)}
-          />
-          <InputLabel>Место</InputLabel>
-          <StyledInput
-            type="text"
-            placeholder={'Место проведения'}
-            value={place}
-            onChange={(e) => setPlace(e.target.value)}
-            onKeyDown={(e) => handleKeyPress(e)}
-          />
-          <InputLabel>Дата проведения</InputLabel>
-          <StyledInput
-            type="date"
-            placeholder={'Место проведения'}
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            onKeyDown={(e) => handleKeyPress(e)}
-          />
-          <InputLabel>Описание</InputLabel>
-          <StyledTextArea
-            placeholder={'Описание мероприятия'}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <Block>
+            <InputLabelSpeakers>Основная информация</InputLabelSpeakers>
+            <InputLabel>Заголовок</InputLabel>
+            <StyledInput
+              type="text"
+              placeholder={'Название мероприятия'}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => handleKeyPress(e)}
+            />
+            <InputLabel>Место</InputLabel>
+            <StyledInput
+              type="text"
+              placeholder={'Место проведения'}
+              value={place}
+              onChange={(e) => setPlace(e.target.value)}
+              onKeyDown={(e) => handleKeyPress(e)}
+            />
+            <InputLabel>Дата проведения</InputLabel>
+            <StyledInput
+              type="date"
+              placeholder={'Место проведения'}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              onKeyDown={(e) => handleKeyPress(e)}
+            />
+            <InputLabel>Описание</InputLabel>
+            <StyledTextArea
+              placeholder={'Описание мероприятия'}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Block>
+          <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
+            <InputLabelSpeakers>Выбранные спикеры</InputLabelSpeakers>
+            {draft?.speakers && draft?.speakers.length > 0 ? (
+              draft?.speakers?.map((speaker) => {
+                return <Speaker key={speaker.id} speaker={speaker} isDraft />
+              })
+            ) : (
+              <NotFound>Вы еще не добавили спикеров</NotFound>
+            )}
 
-          <InputLabelSpeakers>Выбранные спикеры</InputLabelSpeakers>
-          {draft?.speakers && draft?.speakers.length > 0 ? (
-            draft?.speakers?.map((speaker) => {
-              return <Speaker key={speaker.id} speaker={speaker} isDraft />
-            })
-          ) : (
-            <NotFound>Вы еще не добавили спикеров</NotFound>
-          )}
-
-          <Action>
-            <SubmitButton onClick={submit} disabled={!title || !place || !description || !date}>
-              Сформировать
-            </SubmitButton>
-            <SaveButton onClick={save}>Сохранить</SaveButton>
-          </Action>
+            <Action>
+              <SubmitButton onClick={submit} disabled={!title || !place || !description || !date}>
+                Сформировать
+              </SubmitButton>
+              <SaveButton onClick={save}>Сохранить</SaveButton>
+              <DeleteButton onClick={deleteMeetup}>Удалить заявку</DeleteButton>
+            </Action>
+          </div>
         </Constructor>
       ) : (
         <NotFound>Черновик не найден, вернитесь на страницу спикеров</NotFound>
@@ -127,6 +142,12 @@ const DraftPage: React.FC = () => {
   )
 }
 
+const Block = styled.div`
+  width: 45%;
+  padding-right: 70px;
+  border-right: 2px solid #e5e5e5;
+`
+
 const NotFound = styled.div`
   text-align: center;
   font-size: 16px;
@@ -135,8 +156,9 @@ const NotFound = styled.div`
 `
 
 const Constructor = styled.div`
-  margin: 0 auto;
-  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
 `
 
 const StyledTextArea = styled.textarea`
@@ -161,9 +183,10 @@ const StyledTextArea = styled.textarea`
 const Action = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 30px;
+  margin-top: auto;
   gap: 20px;
-  justify-content: center;
+  justify-content: start;
+  padding-top: 40px;
 `
 
 const SubmitButton = styled.button`
@@ -192,6 +215,19 @@ const SubmitButton = styled.button`
   }
 `
 
+const DeleteButton = styled.button`
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #838383;
+  font-size: 16px;
+
+  &:hover {
+    color: red;
+  }
+`
+
 const SaveButton = styled.button`
   background: transparent;
   border: none;
@@ -213,12 +249,7 @@ const InputLabel = styled.div`
 
 const InputLabelSpeakers = styled.div`
   color: #1e1e1e;
-  font-size: 20px;
-  margin-top: 30px;
-
-  border-top: 1px solid #cdcdcd;
-
-  padding-top: 30px;
+  font-size: 25px;
 `
 
 const StyledInput = styled.input<{ $error?: boolean }>`

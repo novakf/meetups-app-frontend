@@ -165,10 +165,10 @@ const SpeakerAvatar = styled.img`
 const AvatarContainer = styled.div`
   display: flex;
   align-items: center;
-  border-radius: 50%;
+  border-radius: 25px;
   border: 1px solid #d5d5d5;
-  height: 40px;
-  width: 40px;
+  height: 50px;
+  width: 50px;
   overflow: hidden;
   background: rgb(224, 224, 224);
 `
@@ -182,11 +182,11 @@ const SpeakerForm = styled.form`
 `
 
 const SpeakerName = styled.div`
-  font-size: 24px;
+  font-size: 20px;
 `
 
 const SpeakerCompany = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   color: #00ddff;
 `
 

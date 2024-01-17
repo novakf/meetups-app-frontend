@@ -37,19 +37,24 @@ const MeetupPage: React.FC = () => {
 
       {meetup ? (
         <Constructor>
-          <InputLabel>Заголовок</InputLabel>
-          <StyledInput>{meetup?.title}</StyledInput>
-          <InputLabel>Место</InputLabel>
-          <StyledInput>{meetup.place}</StyledInput>
-          <InputLabel>Дата проведения</InputLabel>
-          <StyledInput>{meetup.date}</StyledInput>
-          <InputLabel>Описание</InputLabel>
-          <StyledInput>{meetup.description}</StyledInput>
-          <InputLabelSpeakers>Участвующие спикеры</InputLabelSpeakers>
-          {meetup?.speakers?.map((speaker) => {
-            return <Speaker speaker={speaker} key={speaker.id} />
-          })}
-          <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>
+          <Block>
+            <InputLabelSpeakers>Основная информация</InputLabelSpeakers>
+            <InputLabel>Заголовок</InputLabel>
+            <StyledInput>{meetup?.title}</StyledInput>
+            <InputLabel>Место</InputLabel>
+            <StyledInput>{meetup.place}</StyledInput>
+            <InputLabel>Дата проведения</InputLabel>
+            <StyledInput>{meetup.date}</StyledInput>
+            <InputLabel>Описание</InputLabel>
+            <StyledTextArea value={meetup.description} readOnly />
+          </Block>
+          <div style={{ width: '45%' }}>
+            <InputLabelSpeakers>Участвующие спикеры</InputLabelSpeakers>
+            {meetup?.speakers?.map((speaker) => {
+              return <Speaker speaker={speaker} key={speaker.id} />
+            })}
+            <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>
+          </div>
         </Constructor>
       ) : (
         <NotFound>Митап не найден</NotFound>
@@ -57,6 +62,31 @@ const MeetupPage: React.FC = () => {
     </Container>
   )
 }
+
+const StyledTextArea = styled.textarea`
+  margin-top: 15px;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+  padding: 0px;
+  outline: none;
+  border-bottom: 2px solid #dddddd;
+  padding: 6px 10px;
+  font-size: 14px;
+  transition: all 0.2s;
+  width: 100%;
+
+  height: 50px;
+
+  &:focus {
+    border-bottom: 2px solid #898989;
+  }
+`
+
+const Block = styled.div`
+  width: 45%;
+  padding-right: 70px;
+  border-right: 2px solid #e5e5e5;
+`
 
 const SaveButton = styled.button`
   background: transparent;
@@ -81,8 +111,8 @@ const NotFound = styled.div`
 `
 
 const Constructor = styled.div`
-  margin: 0 auto;
-  width: 60%;
+  display: flex;
+  justify-content: space-between;
 `
 
 const InputLabel = styled.div`
@@ -94,7 +124,6 @@ const InputLabel = styled.div`
 const InputLabelSpeakers = styled.div`
   color: #1e1e1e;
   font-size: 25px;
-  margin-top: 30px;
 
   padding-top: 30px;
 `
