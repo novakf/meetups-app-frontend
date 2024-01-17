@@ -41,6 +41,7 @@ const DraftPage: React.FC = () => {
       .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/speakers')
+        setMessage({ messageText: 'Заяка успешно удалена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -48,13 +49,12 @@ const DraftPage: React.FC = () => {
   const submit = () => {
     axios
       .put('http://localhost:3001/meetups/complete/creator/')
-      .then((res) => {
+      .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/profile/meetups')
-        console.log(res)
       })
       .catch((err) => {
-        setMessage({ messageText:  err.response.data.message, status: 'error'}, dispatch)
+        setMessage({ messageText: err.response.data.message, status: 'error' }, dispatch)
       })
   }
 
