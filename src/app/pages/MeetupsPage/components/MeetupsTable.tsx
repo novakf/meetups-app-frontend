@@ -107,7 +107,7 @@ const MeetupsTable: React.FC = () => {
                           <AcceptIcon />
                         </ClearButton>
                       </Tooltip>
-                      <Tooltip title={<div>Отлонить</div>}>
+                      <Tooltip title={<div>Отклонить</div>}>
                         <ClearButton
                           onClick={(e) => {
                             e.preventDefault()
@@ -204,7 +204,7 @@ const RowExample = styled.div<{ $moder: boolean }>`
   ${(p) =>
     p.$moder &&
     `
-  grid-template-columns: 5% 17% 16% 8% 10% 15% 15% 13%;
+  grid-template-columns: 5% 18% 16% 8% 10% 15% 15% 13%;
   `}
 `
 
@@ -217,12 +217,20 @@ const Row = styled.div<{ $moder: boolean }>`
 
   &:hover {
     background: #f1f1f1;
+
+    ${ActionCell} > div {
+      opacity: 0;
+    }
+
+    ${ButtonGroup} {
+      opacity: 1 !important;
+    }
   }
 
   ${(p) =>
     p.$moder &&
     `
-  grid-template-columns: 5% 17% 16% 8% 10% 15% 15% 13%;
+  grid-template-columns: 5% 18% 16% 8% 10% 15% 15% 13%;
   `}
 `
 

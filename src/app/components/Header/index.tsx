@@ -65,7 +65,7 @@ const Header: React.FC = () => {
             )}
             {user?.role === 'модератор' && (
               <Tab>
-                <Link to={'/speakers/moderation'}>Модерация</Link>
+                <Link to={'/speakers/moderation'}>Модерация спикеров</Link>
                 <Border $isActive={'/speakers/moderation' === pathname} />
               </Tab>
             )}
@@ -147,7 +147,7 @@ const Column = styled.div`
 
 const Links = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 20px;
 
   a {
     text-decoration: none;

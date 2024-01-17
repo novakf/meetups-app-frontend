@@ -15,6 +15,10 @@ const SpeakersEditablePage: React.FC = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    getSpeakers()
+  }, [])
+
+  const getSpeakers = () => {
     axios
       .get(`http://localhost:3001/speakers/`, {
         headers: {
@@ -27,7 +31,7 @@ const SpeakersEditablePage: React.FC = () => {
       .catch((error) => {
         console.log('SpeakersError', error)
       })
-  }, [])
+  }
 
   const deleteSpeaker = (id: number) => {
     axios
@@ -36,8 +40,9 @@ const SpeakersEditablePage: React.FC = () => {
           'Content-Type': 'application/json',
         },
       })
-      .then((res) => {
-        setSpeakers(res.data.speakers)
+      .then(() => {
+        getSpeakers()
+        // setSpeakers(res.data.speakers)
         setMessage({ messageText: 'Спикер успешно удален' }, dispatch)
       })
       .catch((error) => {

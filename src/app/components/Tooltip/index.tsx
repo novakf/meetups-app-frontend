@@ -14,7 +14,7 @@ const Tooltip: React.FC<Props> = (props) => {
   let timeout: ReturnType<typeof setTimeout>
 
   const showTip = () => {
-    timeout = setTimeout(() => setOpen(true), 500)
+    timeout = setTimeout(() => setOpen(true), 350)
   }
 
   const hideTip = () => {
