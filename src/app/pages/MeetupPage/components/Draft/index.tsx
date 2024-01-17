@@ -49,7 +49,7 @@ const DraftPage: React.FC = () => {
       .put('http://localhost:3001/meetups/delete')
       .then(() => {
         dispatch(setDraftDataAction(undefined))
-        navigate('/profile/meetups')
+        navigate('/speakers')
       })
       .catch((err) => console.log(err))
   }
