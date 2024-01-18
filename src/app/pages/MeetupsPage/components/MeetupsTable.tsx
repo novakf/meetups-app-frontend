@@ -92,7 +92,7 @@ const MeetupsTable: React.FC = () => {
                 <Cell>{meetup.speakers?.length}</Cell>
                 <Cell>{dateStr}</Cell>
                 <Cell>{created}</Cell>
-                {meetup.status === 'сформирован' ? (
+                {user.role === 'модератор' && meetup.status === 'сформирован' ? (
                   <ActionCell style={{ color: '#000' }}>
                     <div>{meetup.status}</div>
                     <ButtonGroup
@@ -123,8 +123,17 @@ const MeetupsTable: React.FC = () => {
                     </ButtonGroup>
                   </ActionCell>
                 ) : (
-                  <Cell style={{ color: meetup.status === 'отклонен' ? '#d70000' : 'green' }}>
-                    <Tooltip title={<div>Заявка обработана!</div>}>{meetup.status}</Tooltip>
+                  <Cell
+                    style={{
+                      color:
+                        meetup.status === 'отклонен' ? '#d70000' : meetup.status === 'утвержден' ? 'green' : '#000',
+                    }}
+                  >
+                    {meetup.status !== 'сформирован' ? (
+                      <Tooltip title={<div>Заявка обработана!</div>}>{meetup.status}</Tooltip>
+                    ) : (
+                      <Tooltip title={<div>Ждите ответ!</div>}>{meetup.status}</Tooltip>
+                    )}
                   </Cell>
                 )}
               </Row>
