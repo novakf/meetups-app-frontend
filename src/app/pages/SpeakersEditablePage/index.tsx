@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
-import axios from 'axios'
-import { SpeakerType } from '../../types'
 import BinIcon from '../../icons/BinIcon'
 import PlusIcon from '../../icons/PlusIcon'
 import { useMessage } from '../../utils'
 import { useDispatch } from 'react-redux'
+import { Service, Speaker } from '../../../../generated/api'
 
 const SpeakersEditablePage: React.FC = () => {
-  const [speakers, setSpeakers] = useState<SpeakerType[]>([])
+  const [speakers, setSpeakers] = useState<Speaker[]>([])
 
   const dispatch = useDispatch()
 
@@ -19,14 +18,9 @@ const SpeakersEditablePage: React.FC = () => {
   }, [])
 
   const getSpeakers = () => {
-    axios
-      .get(`http://localhost:3001/speakers/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    Service.speakersControllerGetByCompany()
       .then((res) => {
-        setSpeakers(res.data.speakers)
+        setSpeakers(res.speakers)
       })
       .catch((error) => {
         console.log('SpeakersError', error)
@@ -34,12 +28,7 @@ const SpeakersEditablePage: React.FC = () => {
   }
 
   const deleteSpeaker = (id: number) => {
-    axios
-      .delete(`http://localhost:3001/speakers/${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    Service.speakersControllerDelete(id)
       .then(() => {
         getSpeakers()
         // setSpeakers(res.data.speakers)

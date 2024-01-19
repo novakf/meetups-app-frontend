@@ -8,9 +8,9 @@ import ModalMenu from './components/ModalMenu'
 import { setUserDataAction, userData } from '../../store/slices/userSlice'
 import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 import GenericMessage from '../Message'
 import { messageData } from '../../store/slices/messageSlice'
+import { Service } from '../../../../generated/api'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
@@ -25,14 +25,9 @@ const Header: React.FC = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/users/me', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    Service.usersControllerGetCurrentUser()
       .then((res) => {
-        dispatch(setUserDataAction(res.data))
+        dispatch(setUserDataAction(res))
         setLoading(false)
       })
       .catch(function (error) {

@@ -1,9 +1,9 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
 import { handleKeyPress, useMessage } from '../../../utils'
+import { Service } from '../../../../../generated/api'
 
 type Props = {
   setError: (value: boolean) => void
@@ -29,14 +29,10 @@ const LoginForm: React.FC<Props> = ({ setError, onSubmit }) => {
   const blurEmail = (e: React.ChangeEvent<HTMLInputElement>) => setEmailErr(emailValid(e.target.value))
 
   const submit = () => {
-    axios
-      .post('http://localhost:3001/auth/login', {
-        email,
-        password,
-      })
+    Service.authControllerLogin({ email, password })
       .then((res) => {
-        dispatch(setUserDataAction(res.data.user))
-        if (res.status === 200) {
+        dispatch(setUserDataAction(res.user))
+        if (res.status === 'ok') {
           useMessage({ messageText: 'Успешный вход в аккаунт' }, dispatch)
         }
         onSubmit()

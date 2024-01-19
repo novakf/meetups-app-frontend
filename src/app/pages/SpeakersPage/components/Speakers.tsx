@@ -1,15 +1,14 @@
-import axios from 'axios'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
-import { SpeakerType } from '../../../types'
 import { draftData, setDraftDataAction } from '../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 import { userData } from '../../../store/slices/userSlice'
+import { Service, Speaker } from '../../../../../generated/api'
 
 type Props = {
   company: string
-  speakers: SpeakerType[]
+  speakers: Speaker[]
 }
 
 const Speakers: React.FC<Props> = ({ company, speakers }) => {
@@ -19,12 +18,7 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   const user = userData()
 
   const getSpeakers = () => {
-    axios
-      .get(`http://localhost:3001/speakers/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    Service.speakersControllerGetByCompany(company)
       .then(() => {
         //  dispatch(setDraftDataAction(res.data.meetup))
       })
@@ -34,11 +28,10 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   }
 
   const addSpeaker = (id: number) => {
-    axios
-      .post(`http://localhost:3001/speakers/${id}`)
+    Service.speakersControllerAddToMeetup(id)
       .then((res) => {
         getSpeakers()
-        dispatch(setDraftDataAction(res.data))
+        dispatch(setDraftDataAction(res))
       })
       .catch(function (error) {
         console.log(error)
@@ -46,11 +39,10 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   }
 
   const deleteSpeaker = (id: number) => {
-    axios
-      .delete(`http://localhost:3001/meetups/speaker/${id}`)
+    Service.meetupsControllerDeleteSpeaker(id)
       .then((res) => {
         getSpeakers()
-        dispatch(setDraftDataAction(res.data))
+        dispatch(setDraftDataAction(res))
       })
       .catch(function (error) {
         console.log(error)
