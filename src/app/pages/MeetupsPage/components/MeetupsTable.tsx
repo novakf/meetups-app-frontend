@@ -81,6 +81,9 @@ const MeetupsTable: React.FC = () => {
         if (meetup.date) date = new Date(meetup.date)
         let created = dateCreate.toLocaleDateString('ru-RU')
         let dateStr = date.toLocaleDateString('ru-RU')
+        let createdTimeArgs = dateCreate.toLocaleTimeString('ru-RU').split(':')
+        createdTimeArgs.pop()
+        let createdTime = createdTimeArgs.join(':')
         return (
           meetup.creatorLogin?.toLocaleLowerCase().includes(filter.organizator.toLocaleLowerCase()) && (
             <RowLink to={`/profile/meetups/${meetup.id}`} key={meetup.id}>
@@ -91,7 +94,9 @@ const MeetupsTable: React.FC = () => {
                 <Cell style={{ textAlign: 'start' }}>{meetup.place}</Cell>
                 <Cell>{meetup.speakers?.length}</Cell>
                 <Cell>{dateStr}</Cell>
-                <Cell>{created}</Cell>
+                <Cell>
+                  {created} в {createdTime}
+                </Cell>
                 {user.role === 'модератор' && meetup.status === 'сформирован' ? (
                   <ActionCell style={{ color: '#000' }}>
                     <div>{meetup.status}</div>

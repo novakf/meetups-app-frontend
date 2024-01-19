@@ -64,7 +64,7 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
       {isDraft ? (
         <SpeakerForm id={`${speaker.id}`}>
           <InputLabel style={{ marginTop: '0px' }}>Начало выступления</InputLabel>
-          <StyledInput type="time" value={start} onChange={(e) => setStart(e.target.value)} />
+          <StyledInput type="time" step={60} value={start} onChange={(e) => setStart(e.target.value)} />
           <InputLabel>Конец выступления</InputLabel>
           <StyledInput type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
           <InputLabel>Тема выступления</InputLabel>

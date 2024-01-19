@@ -97,7 +97,7 @@ const SaveButton = styled.button`
   font-size: 20px;
 
   &:hover {
-    color: #00990d;
+    color: #001d8d;
   }
 
   margin-top: 20px;
