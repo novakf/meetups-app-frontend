@@ -8,7 +8,7 @@ import { filterData } from '../../../store/slices/meetupsFilterSlice'
 import RejectIcon from '../../../icons/RejectIcon'
 import AcceptIcon from '../../../icons/AcceptIcon'
 import { useDispatch } from 'react-redux'
-import { setMessage, useInterval } from '../../../utils'
+import { useMessage, useInterval } from '../../../utils'
 import Tooltip from '../../../components/Tooltip'
 
 const MeetupsTable: React.FC = () => {
@@ -47,7 +47,7 @@ const MeetupsTable: React.FC = () => {
       .put(`http://localhost:3001/meetups/complete/moderator/${id}`, { status: 'утвержден' })
       .then(() => {
         getMeetups()
-        setMessage({ messageText: 'Митап успешно утвержден' }, dispatch)
+        useMessage({ messageText: 'Митап успешно утвержден' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -57,7 +57,7 @@ const MeetupsTable: React.FC = () => {
       .put(`http://localhost:3001/meetups/complete/moderator/${id}`, { status: 'отклонен' })
       .then(() => {
         getMeetups()
-        setMessage({ messageText: 'Митап успешно отклонен' }, dispatch)
+        useMessage({ messageText: 'Митап успешно отклонен' }, dispatch)
       })
       .catch((err) => console.log(err))
   }

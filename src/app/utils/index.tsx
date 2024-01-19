@@ -14,7 +14,7 @@ export const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
   }
 }
 
-export const setMessage = (params: ParamsType, dispatch: Dispatch) => {
+export const useMessage = (params: ParamsType, dispatch: Dispatch) => {
   dispatch(setMessageAction({ ...params, message: true }))
   setTimeout(() => {
     dispatch(setMessageAction({ ...params, message: false }))

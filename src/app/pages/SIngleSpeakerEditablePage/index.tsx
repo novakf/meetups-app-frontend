@@ -4,7 +4,7 @@ import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import axios from 'axios'
 import GenericFileUpload from './components/GenericFileUpload'
-import { setMessage } from '../../utils'
+import { useMessage } from '../../utils'
 import { useDispatch } from 'react-redux'
 
 type Props = {
@@ -71,7 +71,7 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
       })
       .then(() => {
         navigate('/speakers/moderation')
-        setMessage({ messageText: 'Спикер успешно добавлен' }, dispatch)
+        useMessage({ messageText: 'Спикер успешно добавлен' }, dispatch)
       })
       .catch((error) => {
         console.log('AddSpeakerError', error)
@@ -95,7 +95,7 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
       })
       .then(() => {
         getSpeaker(speakerId)
-        setMessage({ messageText: 'Данные успешно сохранены' }, dispatch)
+        useMessage({ messageText: 'Данные успешно сохранены' }, dispatch)
       })
       .catch((error) => {
         console.log('AddSpeakerError', error)

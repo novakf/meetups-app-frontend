@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import { Link, useNavigate } from 'react-router-dom'
 import { draftData, hasDraft, setDraftDataAction } from '../../../../store/slices/draftSlice'
-import { handleKeyPress, setMessage } from '../../../../utils'
+import { handleKeyPress, useMessage } from '../../../../utils'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import Speaker from '../Speaker'
@@ -41,7 +41,7 @@ const DraftPage: React.FC = () => {
       .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/speakers')
-        setMessage({ messageText: 'Заяка успешно удалена' }, dispatch)
+        useMessage({ messageText: 'Заяка успешно удалена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -54,7 +54,7 @@ const DraftPage: React.FC = () => {
         navigate('/profile/meetups')
       })
       .catch((err) => {
-        setMessage({ messageText: err.response.data.message, status: 'error' }, dispatch)
+        useMessage({ messageText: err.response.data.message, status: 'error' }, dispatch)
       })
   }
 

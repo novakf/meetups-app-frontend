@@ -6,7 +6,7 @@ import axios from 'axios'
 import { SpeakerType } from '../../types'
 import BinIcon from '../../icons/BinIcon'
 import PlusIcon from '../../icons/PlusIcon'
-import { setMessage } from '../../utils'
+import { useMessage } from '../../utils'
 import { useDispatch } from 'react-redux'
 
 const SpeakersEditablePage: React.FC = () => {
@@ -43,7 +43,7 @@ const SpeakersEditablePage: React.FC = () => {
       .then(() => {
         getSpeakers()
         // setSpeakers(res.data.speakers)
-        setMessage({ messageText: 'Спикер успешно удален' }, dispatch)
+        useMessage({ messageText: 'Спикер успешно удален' }, dispatch)
       })
       .catch((error) => {
         console.log('SpeakersError', error)

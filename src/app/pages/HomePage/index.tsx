@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
       </Title>
       <Content>
         <UpcomingEvents>
-          <BlockTitle>Предстоящие события</BlockTitle>
+          <BlockTitle>Прошедшие митапы</BlockTitle>
           <Meetups meetups={meetups} />
         </UpcomingEvents>
         <LinkToSpeakers to="/speakers">Стать организатором митапа</LinkToSpeakers>

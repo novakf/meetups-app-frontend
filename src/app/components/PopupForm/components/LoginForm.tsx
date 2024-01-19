@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
-import { handleKeyPress, setMessage } from '../../../utils'
+import { handleKeyPress, useMessage } from '../../../utils'
 
 type Props = {
   setError: (value: boolean) => void
@@ -37,12 +37,12 @@ const LoginForm: React.FC<Props> = ({ setError, onSubmit }) => {
       .then((res) => {
         dispatch(setUserDataAction(res.data.user))
         if (res.status === 200) {
-          setMessage({ messageText: 'Успешный вход в аккаунт' }, dispatch)
+          useMessage({ messageText: 'Успешный вход в аккаунт' }, dispatch)
         }
         onSubmit()
       })
       .catch(function (error) {
-        setMessage({ messageText: error.response.data.message, status: 'error' }, dispatch)
+        useMessage({ messageText: error.response.data.message, status: 'error' }, dispatch)
       })
   }
 

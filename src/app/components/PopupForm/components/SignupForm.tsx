@@ -3,7 +3,7 @@ import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
-import { setMessage } from '../../../utils'
+import { useMessage } from '../../../utils'
 
 type Props = {
   setError: (value: boolean) => void
@@ -30,12 +30,12 @@ const SignupForm: React.FC<Props> = ({ setError, onSubmit }) => {
       .then((res) => {
         dispatch(setUserDataAction(res.data.user))
         if (res.status === 200) {
-          setMessage({ messageText: 'Аккаунт успешно создан' }, dispatch)
+          useMessage({ messageText: 'Аккаунт успешно создан' }, dispatch)
         }
         onSubmit()
       })
       .catch(function (error) {
-        setMessage({ messageText: error.response.data.message, status: 'error'}, dispatch)
+        useMessage({ messageText: error.response.data.message, status: 'error'}, dispatch)
       })
   }
 
