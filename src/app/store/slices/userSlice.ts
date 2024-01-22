@@ -1,14 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 import { UserType } from '../../types'
 
-type State = {
-  userInfo: {
-    Data: UserType
-  }
-}
-
-const initialState = {
+const initialState: UserType = {
   id: -1,
   name: '',
   phone: '',
@@ -28,8 +23,8 @@ const dataSlice = createSlice({
   },
 })
 
-export const userData = () => useSelector((state: State) => state.userInfo.Data)
-export const isLoggedIn = () => useSelector((state: State) => state.userInfo.Data?.id !== -1)
+export const userData = () => useSelector((state: RootState) => state.userInfo.Data)
+export const isLoggedIn = () => useSelector((state: RootState) => state.userInfo.Data?.id !== -1)
 
 export const { setData: setUserDataAction } = dataSlice.actions
 

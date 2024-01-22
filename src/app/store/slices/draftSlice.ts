@@ -1,14 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 import { MeetupsType } from '../../types'
 
-type State = {
-  draftInfo: {
-    Data: MeetupsType
-  }
-}
-
-const initialState = {
+const initialState: MeetupsType = {
   id: -1,
   status: '',
   date: '',
@@ -35,8 +30,8 @@ const dataSlice = createSlice({
   },
 })
 
-export const draftData = () => useSelector((state: State) => state.draftInfo.Data)
-export const hasDraft = () => useSelector((state: State) => state.draftInfo.Data?.id !== -1 || !state.draftInfo.Data)
+export const draftData = () => useSelector((state: RootState) => state.draftInfo.Data)
+export const hasDraft = () => useSelector((state: RootState) => state.draftInfo.Data?.id !== -1 || !state.draftInfo.Data)
 
 export const { setData: setDraftDataAction } = dataSlice.actions
 

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 
 const initialState = {
   company: '',
@@ -15,7 +16,7 @@ const dataSlice = createSlice({
   },
 })
 
-export const filterData = () => useSelector((state: any) => state.speakersFilterInfo.Data)
+export const filterData = () => useSelector((state: RootState) => state.speakersFilterInfo.Data)
 
 export const {
   setCompanyData: setCompanyDataAction,

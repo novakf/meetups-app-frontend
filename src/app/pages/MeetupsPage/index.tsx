@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import MultiDropdown, { Option } from '../../components/MultiDropdown'
 import { useDispatch } from 'react-redux'
 import {
+  clearFilterDataAction,
   filterData,
   setEndDataAction,
   setFilterDataAction,
+  setOrgDataAction,
   setStartDataAction,
 } from '../../store/slices/meetupsFilterSlice'
 import MeetupsTable from './components/MeetupsTable'
@@ -17,7 +19,21 @@ const MeetupsPage: React.FC = () => {
   const filter = filterData()
   const dispatch = useDispatch()
 
+  const [org, setOrg] = useState(filter.organizator)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      dispatch(setOrgDataAction(org))
+    }, 500)
+    return () => clearTimeout(timeout)
+  }, [org])
+
   const defaultGetTitle = (elements: Option[]) => elements.map((el) => el.key).join()
+
+  const clearFilters = () => {
+    dispatch(clearFilterDataAction())
+    setOrg('')
+  }
 
   return (
     <Container>
@@ -26,6 +42,7 @@ const MeetupsPage: React.FC = () => {
           <SLink to={'/'}>Домашняя страница</SLink>
           <SLink to={'/profile/meetups'}>Мои митапы</SLink>
         </Breadcrumbs>
+        <ClearFilter onClick={clearFilters}>Очистить фильтры</ClearFilter>
       </FirstLine>
 
       <Filter>
@@ -35,6 +52,7 @@ const MeetupsPage: React.FC = () => {
           options={options}
           getTitle={defaultGetTitle}
         />
+        <UserInput value={org} onChange={(e) => setOrg(e.target.value)} placeholder="Введите организатора" />
         <Dates>
           <div>
             <DateLabel>Начало</DateLabel>
@@ -61,6 +79,34 @@ const MeetupsPage: React.FC = () => {
     </Container>
   )
 }
+
+const UserInput = styled.input`
+  width: 300px;
+  height: 52px;
+  border-radius: 10px !important;
+  border: 1px solid #c5c5c5;
+  padding: 0 12px;
+  outline: 0px solid #fff;
+  transition: 0.3s;
+
+  &:focus {
+    border-radius: 0;
+    outline: 1px solid #008fff;
+  }
+`
+
+const ClearFilter = styled.button`
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #838383;
+  font-size: 16px;
+
+  &:hover {
+    color: #4d4d4d;
+  }
+`
 
 const DateLabel = styled.div`
   font-size: 16px;

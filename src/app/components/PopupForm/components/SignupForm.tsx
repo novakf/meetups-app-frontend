@@ -3,16 +3,14 @@ import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
+import { useMessage } from '../../../utils'
 
 type Props = {
   setError: (value: boolean) => void
-  setMessage: (value: boolean) => void
-  setMessageText: (value: string) => void
-  setStatus: (value: string) => void
   onSubmit: () => void
 }
 
-const SignupForm: React.FC<Props> = ({ setError, setMessage, setMessageText, setStatus, onSubmit }) => {
+const SignupForm: React.FC<Props> = ({ setError, onSubmit }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -32,16 +30,12 @@ const SignupForm: React.FC<Props> = ({ setError, setMessage, setMessageText, set
       .then((res) => {
         dispatch(setUserDataAction(res.data.user))
         if (res.status === 200) {
-          setMessage(true)
-          setMessageText('Аккаунт успешно создан')
-          setStatus('success')
+          useMessage({ messageText: 'Аккаунт успешно создан' }, dispatch)
         }
         onSubmit()
       })
       .catch(function (error) {
-        setMessage(true)
-        setMessageText(error.response.data.message)
-        setStatus('error')
+        useMessage({ messageText: error.response.data.message, status: 'error'}, dispatch)
       })
   }
 

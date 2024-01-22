@@ -26,6 +26,9 @@ input {
   border-radius: 10px !important;
   border: 1px solid #c5c5c5;
 
+  outline: 0px solid #fff;
+  transition: 0.3s;
+
   &:not(:has(input:disabled)) {
     &:hover,
     &:focus {

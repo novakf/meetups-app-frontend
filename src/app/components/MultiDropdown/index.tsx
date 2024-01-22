@@ -110,10 +110,13 @@ const DropDown = styled.div<{ $active: boolean }>`
   width: 326px;
   transition: all 0.3s;
   pointer-events: none;
+  transform: scaleY(0);
+  transform-origin: top;
 
   ${(p) =>
     p.$active &&
     `opacity: 1;
+    transform: scaleY(1);
    pointer-events: all;`}
 `
 

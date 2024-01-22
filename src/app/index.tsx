@@ -6,6 +6,8 @@ import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import MeetupsPage from './pages/MeetupsPage'
 import MeetupPage from './pages/MeetupPage'
+import SpeakersEditablePage from './pages/SpeakersEditablePage'
+import SingleSpeakerEditablePage from './pages/SIngleSpeakerEditablePage'
 
 const App: React.FC = () => {
   return (
@@ -17,6 +19,9 @@ const App: React.FC = () => {
         <Route path="/speakers/:id" element={<SingleSpeakerPage />} />
         <Route path="/profile/meetups" element={<MeetupsPage />} />
         <Route path="/profile/meetups/:id" element={<MeetupPage />} />
+        <Route path="/speakers/moderation" element={<SpeakersEditablePage />} />
+        <Route path="/speakers/moderation/:id" element={<SingleSpeakerEditablePage />} />
+        <Route path="/speakers/moderation/new" element={<SingleSpeakerEditablePage isNew/>} />
       </Routes>
     </BrowserRouter>
   )

@@ -20,9 +20,6 @@ const Meetups: React.FC<Props> = ({ meetups }) => {
                 <CardInfo>{meetup.place}</CardInfo>
                 <CardInfo>{meetup.date}</CardInfo>
               </CardContent>
-              <CardAction>
-                <Register>Зарегистрироваться</Register>
-              </CardAction>
             </Link>
           </Card>
         )
@@ -30,20 +27,6 @@ const Meetups: React.FC<Props> = ({ meetups }) => {
     </Cards>
   )
 }
-
-const Register = styled.div`
-  text-decoration: none;
-  color: #336fee;
-  &:hover {
-    color: #1f50ba;
-  }
-`
-
-const CardAction = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  margin-left: 20px;
-`
 
 const CardTitle = styled.div`
   display: -webkit-box;

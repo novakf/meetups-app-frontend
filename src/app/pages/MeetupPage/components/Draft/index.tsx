@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import { Link, useNavigate } from 'react-router-dom'
 import { draftData, hasDraft, setDraftDataAction } from '../../../../store/slices/draftSlice'
-import { handleKeyPress } from '../../../../utils'
+import { handleKeyPress, useMessage } from '../../../../utils'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import Speaker from '../Speaker'
-import GenericMessage from '../../../../components/Message'
 
 const DraftPage: React.FC = () => {
   const draft = draftData()
@@ -16,16 +15,8 @@ const DraftPage: React.FC = () => {
   const [date, setDate] = useState(draft?.date ? draft.date : '')
   const [description, setDescription] = useState(draft?.description ? draft.description : '')
 
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    message && setTimeout(() => setMessage(false), 3000)
-  }, [message])
 
   const getDraft = () => {
     axios
@@ -49,6 +40,7 @@ const DraftPage: React.FC = () => {
       })
       .then(() => {
         getDraft()
+        useMessage({ messageText: 'Заяка успешно сохранена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -59,6 +51,7 @@ const DraftPage: React.FC = () => {
       .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/speakers')
+        useMessage({ messageText: 'Заяка успешно удалена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -66,15 +59,12 @@ const DraftPage: React.FC = () => {
   const submit = () => {
     axios
       .put('http://localhost:3001/meetups/complete/creator/')
-      .then((res) => {
+      .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/profile/meetups')
-        console.log(res)
       })
       .catch((err) => {
-        setMessage(true)
-        setMessageText(err.response.data.message)
-        setStatus('error')
+        useMessage({ messageText: err.response.data.message, status: 'error' }, dispatch)
       })
   }
 
@@ -146,7 +136,6 @@ const DraftPage: React.FC = () => {
       ) : (
         <NotFound>Черновик не найден, вернитесь на страницу спикеров</NotFound>
       )}
-      <GenericMessage status={status} open={message} text={messageText} />
     </Container>
   )
 }

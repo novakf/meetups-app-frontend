@@ -10,13 +10,13 @@ type Props = {
   text: string
 }
 
-const GenericMessage: React.FC<Props> = ({ status = 'info', ...props }) => {
+const GenericMessage: React.FC<Props> = (props) => {
   return (
     <Container>
       <MessageBox $open={props.open}>
-        {status === 'success' && <SuccessIcon style={{ marginRight: '10px' }} />}
-        {status === 'error' && <ErrorIcon style={{ marginRight: '10px' }} />}
-        {status === 'info' && <InfoIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'success' && <SuccessIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'error' && <ErrorIcon style={{ marginRight: '10px' }} />}
+        {props.status === 'info' && <InfoIcon style={{ marginRight: '10px' }} />}
         {props.text}
       </MessageBox>
     </Container>

@@ -10,6 +10,7 @@ import UserContainer from './components/UserContainer'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import GenericMessage from '../Message'
+import { messageData } from '../../store/slices/messageSlice'
 
 const Header: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(false)
@@ -17,9 +18,7 @@ const Header: React.FC = () => {
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
+  const message = messageData()
 
   const user = userData()
 
@@ -44,10 +43,6 @@ const Header: React.FC = () => {
 
   const { pathname } = useLocation()
 
-  useEffect(() => {
-    message && setTimeout(() => setMessage(false), 3000)
-  }, [message])
-
   return (
     <Container>
       <Content>
@@ -60,12 +55,18 @@ const Header: React.FC = () => {
           <Links>
             <Tab>
               <Link to={'/speakers'}>Спикеры</Link>
-              <Border $isActive={'/speakers' == pathname} />
+              <Border $isActive={'/speakers' === pathname} />
             </Tab>
             {user && user.id !== -1 && (
               <Tab>
-                <Link to={'/profile/meetups'}>{user.role == 'модератор' ? 'Текущие заявки' : 'Мои заявки'}</Link>
-                <Border $isActive={'/profile/meetups' == pathname} />
+                <Link to={'/profile/meetups'}>{user.role === 'модератор' ? 'Текущие заявки' : 'Мои заявки'}</Link>
+                <Border $isActive={'/profile/meetups' === pathname} />
+              </Tab>
+            )}
+            {user?.role === 'модератор' && (
+              <Tab>
+                <Link to={'/speakers/moderation'}>Модерация спикеров</Link>
+                <Border $isActive={'/speakers/moderation' === pathname} />
               </Tab>
             )}
           </Links>
@@ -73,7 +74,7 @@ const Header: React.FC = () => {
 
         {!loading &&
           (user && user.id !== -1 ? (
-            <UserContainer user={user} setMessage={setMessage} setMessageText={setMessageText} setStatus={setStatus} />
+            <UserContainer user={user} />
           ) : (
             <Action>
               <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
@@ -90,7 +91,7 @@ const Header: React.FC = () => {
       </Content>
       <PopupForm open={loginOpen} onClose={() => setLoginOpen(false)} type="Login" />
       <PopupForm open={signupOpen} onClose={() => setSignupOpen(false)} type="Signup" />
-      <GenericMessage status={status} open={message} text={messageText} />
+      <GenericMessage status={message.status} open={message.message} text={message.messageText} />
     </Container>
   )
 }
@@ -146,7 +147,7 @@ const Column = styled.div`
 
 const Links = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 20px;
 
   a {
     text-decoration: none;

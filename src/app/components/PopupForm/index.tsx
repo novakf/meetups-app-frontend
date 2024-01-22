@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from '../Modal'
 import { styled } from 'styled-components'
 import robot from '../../assets/robot.png'
@@ -6,7 +6,6 @@ import angryRobot from '../../assets/angry-robot.png'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import BmstuLogo from '../../icons/BmstuLogo'
-import GenericMessage from '../Message'
 
 type Props = {
   open: boolean
@@ -20,13 +19,6 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
   }
   const [error, setError] = useState(false)
   const [formType, setFormType] = useState(type)
-  const [status, setStatus] = useState('')
-  const [message, setMessage] = useState(false)
-  const [messageText, setMessageText] = useState('')
-
-  useEffect(() => {
-    message && setTimeout(() => setMessage(false), 3000)
-  }, [message])
 
   return (
     <>
@@ -54,17 +46,11 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
             {formType === 'Login' ? (
               <LoginForm
                 setError={setError}
-                setMessage={setMessage}
-                setMessageText={setMessageText}
-                setStatus={setStatus}
                 onSubmit={handleClose}
               />
             ) : (
               <SignupForm
                 setError={setError}
-                setMessage={setMessage}
-                setMessageText={setMessageText}
-                setStatus={setStatus}
                 onSubmit={handleClose}
               />
             )}
@@ -82,7 +68,6 @@ const PopupForm: React.FC<Props> = ({ open, onClose, type }) => {
           </Right>
         </Content>
       </Modal>
-      <GenericMessage status={status} open={message} text={messageText} />
     </>
   )
 }
