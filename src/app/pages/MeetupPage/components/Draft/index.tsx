@@ -18,6 +18,14 @@ const DraftPage: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const getDraft = () => {
+    Service.meetupsControllerGetById(draft.id)
+      .then((res) => {
+        dispatch(setDraftDataAction(res))
+      })
+      .catch((err) => console.log(err))
+  }
+
   const save = () => {
     Service.meetupsControllerUpdate({
       title,
@@ -25,8 +33,8 @@ const DraftPage: React.FC = () => {
       date,
       description,
     })
-      .then((res) => {
-        dispatch(setDraftDataAction(res))
+      .then(() => {
+        getDraft()
         useMessage({ messageText: 'Митап успешно сохранен' }, dispatch)
       })
       .catch((err) => console.log(err))

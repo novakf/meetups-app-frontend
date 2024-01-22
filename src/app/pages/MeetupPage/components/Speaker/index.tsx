@@ -20,8 +20,8 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
 
   const saveSpeaker = (id: number, startsAt: string, endsAt: string, reportTheme: string) => {
     Service.meetupsControllerUpdateSpeaker(id, { startsAt, endsAt, reportTheme })
-      .then((res) => {
-        dispatch(setDraftDataAction(res))
+      .then(() => {
+        getDraft()
         useMessage({ messageText: 'Информация о спикере успешно сохранена' }, dispatch)
       })
       .catch((err) => console.log(err))
