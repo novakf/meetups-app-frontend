@@ -1,6 +1,9 @@
 /* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* tslint:disable */
+
+import { MeetupsSpeakersType } from "../../../src/app/types";
+
 /* eslint-disable */
 export type Speaker = {
     /**
@@ -35,5 +38,7 @@ export type Speaker = {
      * Описание
      */
     description: string;
+
+    MeetupsSpeakers: MeetupsSpeakersType
 };
 
