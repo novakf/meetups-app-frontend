@@ -27,6 +27,15 @@ const DraftPage: React.FC = () => {
     message && setTimeout(() => setMessage(false), 3000)
   }, [message])
 
+  const getDraft = () => {
+    axios
+      .get(`http://localhost:3001/meetups/${draft.id}`)
+      .then((res) => {
+        dispatch(setDraftDataAction(res.data))
+      })
+      .catch((err) => console.log(err))
+  }
+
   const save = () => {
     axios
       .put('http://localhost:3001/meetups', {
@@ -38,8 +47,8 @@ const DraftPage: React.FC = () => {
         date,
         description,
       })
-      .then((res) => {
-        dispatch(setDraftDataAction(res.data))
+      .then(() => {
+        getDraft()
       })
       .catch((err) => console.log(err))
   }
