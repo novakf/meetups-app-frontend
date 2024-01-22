@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { Meetup } from '../../../../generated/api'
+import { MeetupsType } from '../../types'
 
-const initialState: Meetup = {
+const initialState: MeetupsType = {
   id: -1,
   status: '',
   date: '',
@@ -17,6 +17,7 @@ const initialState: Meetup = {
   creatorLogin: '',
   moderatorLogin: '',
   speakers: [],
+  MeetupsSpeakers: [],
 }
 
 const dataSlice = createSlice({

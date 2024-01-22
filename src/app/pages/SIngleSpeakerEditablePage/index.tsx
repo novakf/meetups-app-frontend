@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import axios from 'axios'
 import GenericFileUpload from './components/GenericFileUpload'
 import { useMessage } from '../../utils'
 import { useDispatch } from 'react-redux'
-import { Service } from '../../../../generated/api'
 
 type Props = {
   isNew?: boolean
@@ -31,7 +31,7 @@ let SpeakerInitial = {
 
 const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
   const [currentSpeaker, setCurrentSpeaker] = useState<Speaker>(SpeakerInitial)
-  const [avatar, setAvatar] = useState<File | string>()
+  const [avatar, setAvatar] = useState<File>()
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -43,10 +43,11 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
   }, [])
 
   const getSpeaker = (speakerId: number) => {
-    Service.speakersControllerGetById(speakerId)
+    axios
+      .get(`http://localhost:3001/speakers/${speakerId}`)
       .then((result) => {
-        setCurrentSpeaker(result)
-        setAvatar(result.avatarImg)
+        setCurrentSpeaker(result.data)
+        setAvatar(result.data.avatarImg)
       })
       .catch((error) => {
         console.log('GetSpeakerError', error)
@@ -54,7 +55,20 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
   }
 
   const createSpeaker = () => {
-    Service.speakersControllerCreate({ ...currentSpeaker, file: avatar })
+    var formData = new FormData()
+    currentSpeaker.name && formData.append('name', currentSpeaker.name)
+    currentSpeaker.organization && formData.append('organization', currentSpeaker.organization)
+    currentSpeaker.phone && formData.append('phone', currentSpeaker.phone)
+    currentSpeaker.email && formData.append('email', currentSpeaker.email)
+    currentSpeaker.description && formData.append('description', currentSpeaker.description)
+    avatar && formData.append('file', avatar)
+
+    axios
+      .post(`http://localhost:3001/speakers/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         navigate('/speakers/moderation')
         useMessage({ messageText: 'Спикер успешно добавлен' }, dispatch)
@@ -65,7 +79,20 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
   }
 
   const saveSpeaker = () => {
-    Service.speakersControllerUpdate(speakerId, { ...currentSpeaker, file: avatar })
+    var formData = new FormData()
+    currentSpeaker.name && formData.append('name', currentSpeaker.name)
+    currentSpeaker.organization && formData.append('organization', currentSpeaker.organization)
+    currentSpeaker.phone && formData.append('phone', currentSpeaker.phone)
+    currentSpeaker.email && formData.append('email', currentSpeaker.email)
+    currentSpeaker.description && formData.append('description', currentSpeaker.description)
+    avatar && formData.append('file', avatar)
+
+    axios
+      .put(`http://localhost:3001/speakers/${speakerId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         getSpeaker(speakerId)
         useMessage({ messageText: 'Данные успешно сохранены' }, dispatch)
@@ -128,19 +155,9 @@ const SingleSpeakerEditablePage: React.FC<Props> = (props) => {
             onChange={(e) => setCurrentSpeaker({ ...currentSpeaker, description: e.target.value })}
           />
           {props.isNew ? (
-            <SubmitButton
-              onClick={createSpeaker}
-              disabled={!currentSpeaker.name || !currentSpeaker.email || !currentSpeaker.phone}
-            >
-              Подтвердить
-            </SubmitButton>
+            <SubmitButton onClick={createSpeaker}>Подтвердить</SubmitButton>
           ) : (
-            <SubmitButton
-              onClick={saveSpeaker}
-              disabled={!currentSpeaker.name || !currentSpeaker.email || !currentSpeaker.phone}
-            >
-              Сохранить
-            </SubmitButton>
+            <SubmitButton onClick={saveSpeaker}>Сохранить</SubmitButton>
           )}
         </Form>
       </SpeakerContainer>

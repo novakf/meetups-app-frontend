@@ -3,13 +3,14 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { styled } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import speakersMock from '../../mocks/speakers'
+import { SpeakerType } from '../../types'
+import axios from 'axios'
 import { draftData } from '../../store/slices/draftSlice'
 import { isLoggedIn, userData } from '../../store/slices/userSlice'
-import { Service, Speaker } from '../../../../generated/api'
 
 const SingleSpeakerPage: React.FC = () => {
   const [response, setResponse] = useState(false)
-  const [currentSpeaker, setCurrentSpeaker] = useState<Speaker | undefined>()
+  const [currentSpeaker, setCurrentSpeaker] = useState<SpeakerType | undefined>()
   const [loading, setLoading] = useState(true)
 
   const location = useLocation()
@@ -21,7 +22,8 @@ const SingleSpeakerPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true)
-    Service.speakersControllerGetById(speakerId)
+    axios
+      .get(`http://localhost:3001/speakers/${speakerId}`)
       .then((response) => {
         if (response) {
           setResponse(true)
@@ -29,7 +31,7 @@ const SingleSpeakerPage: React.FC = () => {
         return response
       })
       .then((result) => {
-        setCurrentSpeaker(result)
+        setCurrentSpeaker(result.data)
         setLoading(false)
       })
       .catch((error) => {

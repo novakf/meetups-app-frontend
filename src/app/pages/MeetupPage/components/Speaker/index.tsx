@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
+import { SpeakerType } from '../../../../types'
+import axios from 'axios'
 import { draftData, setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
-import { Service, Speaker as SpeakerType } from '../../../../../../generated/api'
-import { useMessage } from '../../../../utils'
 
 type Props = {
   speaker: SpeakerType
@@ -19,28 +19,33 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
   const dispatch = useDispatch()
 
   const saveSpeaker = (id: number, startsAt: string, endsAt: string, reportTheme: string) => {
-    Service.meetupsControllerUpdateSpeaker(id, { startsAt, endsAt, reportTheme })
+    axios
+      .put(`http://localhost:3001/meetups/speaker/${id}`, {
+        startsAt,
+        endsAt,
+        reportTheme,
+      })
       .then(() => {
         getDraft()
-        useMessage({ messageText: 'Информация о спикере успешно сохранена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
 
   const getDraft = () => {
-    Service.meetupsControllerGetById(draft.id)
+    axios
+      .get(`http://localhost:3001/meetups/${draft.id}`)
       .then((res) => {
-        dispatch(setDraftDataAction(res))
+        dispatch(setDraftDataAction(res.data))
       })
       .catch((err) => console.log(err))
   }
 
   const deleteSpeaker = (id: number) => {
-    Service.meetupsControllerDeleteSpeaker(id)
+    axios
+      .delete(`http://localhost:3001/meetups/speaker/${id}`)
       .then((res) => {
-        dispatch(setDraftDataAction(res))
+        dispatch(setDraftDataAction(res.data))
         getDraft()
-        useMessage({ messageText: 'Спикер успешно удален из митапа' }, dispatch)
       })
       .catch((err) => console.log(err))
   }

@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
 import speakersMock from '../../mocks/speakers'
 import SearchIcon from '../../icons/SearchIcon'
+import { SpeakerType } from '../../types'
+import axios from 'axios'
 import { isLoggedIn, userData } from '../../store/slices/userSlice'
 import Speakers from './components/Speakers'
 import { useDispatch } from 'react-redux'
 import { draftData, setDraftDataAction } from '../../store/slices/draftSlice'
 import { filterData, setCompanyDataAction } from '../../store/slices/speakersFilterSlice'
-import { Service, Speaker } from '../../../../generated/api'
 
 const SpeakersPage: React.FC = () => {
   const filter = filterData()
@@ -17,7 +18,7 @@ const SpeakersPage: React.FC = () => {
   let companyQuery = filter.company
 
   const [searchValue, setSearchValue] = useState(companyQuery)
-  const [speakers, setSpeakers] = useState<Speaker[]>([])
+  const [speakers, setSpeakers] = useState<SpeakerType[]>([])
   const [response, setResponse] = useState(false)
   const [loading, setLoading] = useState(true)
 
@@ -28,7 +29,12 @@ const SpeakersPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true)
-    Service.speakersControllerGetByCompany(filter.company)
+    axios
+      .get(`http://localhost:3001/speakers/?company=${filter.company}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((response) => {
         if (!response) {
           setResponse(true)
@@ -36,8 +42,8 @@ const SpeakersPage: React.FC = () => {
         return response
       })
       .then((res) => {
-        setSpeakers(res.speakers)
-        dispatch(setDraftDataAction(res.meetup))
+        setSpeakers(res.data.speakers)
+        dispatch(setDraftDataAction(res.data.meetup))
         setLoading(false)
       })
       .catch((error) => {
@@ -141,7 +147,7 @@ const Cart = styled(Link)<{ $disabled: boolean }>`
   width: fit-content;
   z-index: 1;
   color: #000;
-
+  
   &:hover {
     border: 1px solid #878787;
   }

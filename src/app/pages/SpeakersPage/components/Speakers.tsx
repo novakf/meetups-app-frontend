@@ -1,14 +1,15 @@
+import axios from 'axios'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
+import { SpeakerType } from '../../../types'
 import { draftData, setDraftDataAction } from '../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 import { userData } from '../../../store/slices/userSlice'
-import { Service, Speaker } from '../../../../../generated/api'
 
 type Props = {
   company: string
-  speakers: Speaker[]
+  speakers: SpeakerType[]
 }
 
 const Speakers: React.FC<Props> = ({ company, speakers }) => {
@@ -18,9 +19,14 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   const user = userData()
 
   const getSpeakers = () => {
-    Service.speakersControllerGetByCompany(company)
-      .then((res) => {
-        dispatch(setDraftDataAction(res.meetup))
+    axios
+      .get(`http://localhost:3001/speakers/`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(() => {
+        //  dispatch(setDraftDataAction(res.data.meetup))
       })
       .catch((error) => {
         console.log('SpeakersError', error)
@@ -28,9 +34,11 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   }
 
   const addSpeaker = (id: number) => {
-    Service.speakersControllerAddToMeetup(id)
-      .then(() => {
+    axios
+      .post(`http://localhost:3001/speakers/${id}`)
+      .then((res) => {
         getSpeakers()
+        dispatch(setDraftDataAction(res.data))
       })
       .catch(function (error) {
         console.log(error)
@@ -38,9 +46,11 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   }
 
   const deleteSpeaker = (id: number) => {
-    Service.meetupsControllerDeleteSpeaker(id)
-      .then(() => {
+    axios
+      .delete(`http://localhost:3001/meetups/speaker/${id}`)
+      .then((res) => {
         getSpeakers()
+        dispatch(setDraftDataAction(res.data))
       })
       .catch(function (error) {
         console.log(error)

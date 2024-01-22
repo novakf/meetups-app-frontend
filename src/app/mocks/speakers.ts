@@ -1,4 +1,4 @@
-import { Speaker } from '../../../generated/api'
+import { SpeakerType } from '../types'
 import avatar1 from './assets/avatar1.png'
 import avatar2 from './assets/avatar2.png'
 import avatar3 from './assets/avatar3.png'
@@ -95,4 +95,4 @@ export default [
     description:
       'Руководитель отдела искусственного интеллекта Цифрум (Росатом). Работал в ABBYY, Medcore, TNK-BP, Microtest, Связной. Визионер в области нейроморфных систем искусственного интеллекта.',
   },
-] as Speaker[]
+] as SpeakerType[]

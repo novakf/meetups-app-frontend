@@ -1,9 +1,9 @@
+import axios from 'axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from 'styled-components'
 import { setUserDataAction } from '../../../store/slices/userSlice'
 import { useMessage } from '../../../utils'
-import { Service } from '../../../../../generated/api'
 
 type Props = {
   setError: (value: boolean) => void
@@ -21,16 +21,21 @@ const SignupForm: React.FC<Props> = ({ setError, onSubmit }) => {
   const dispatch = useDispatch()
 
   const submit = () => {
-    Service.authControllerSignup({ email, name, password })
+    axios
+      .post('http://localhost:3001/auth/signup', {
+        email,
+        name,
+        password,
+      })
       .then((res) => {
-        dispatch(setUserDataAction(res.user))
+        dispatch(setUserDataAction(res.data.user))
         if (res.status === 200) {
           useMessage({ messageText: 'Аккаунт успешно создан' }, dispatch)
         }
         onSubmit()
       })
       .catch(function (error) {
-        useMessage({ messageText: error.response.data.message, status: 'error' }, dispatch)
+        useMessage({ messageText: error.response.data.message, status: 'error'}, dispatch)
       })
   }
 

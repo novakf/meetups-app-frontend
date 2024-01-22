@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { userData } from '../../../store/slices/userSlice'
+import axios from 'axios'
+import { MeetupsType } from '../../../types'
 import { filterData } from '../../../store/slices/meetupsFilterSlice'
 import RejectIcon from '../../../icons/RejectIcon'
 import AcceptIcon from '../../../icons/AcceptIcon'
 import { useDispatch } from 'react-redux'
 import { useMessage, useInterval } from '../../../utils'
 import Tooltip from '../../../components/Tooltip'
-import { Meetup, Service } from '../../../../../generated/api'
 
 const MeetupsTable: React.FC = () => {
   const user = userData()
   const filter = filterData()
+
   const dispatch = useDispatch()
 
-  const [meetups, setMeetups] = useState<Meetup[]>([])
+  const [meetups, setMeetups] = useState<MeetupsType[]>([])
+  // const [fetch, setFetch] = useState(true)
 
   const getStatus = () => {
     let arr: string[] = []
@@ -31,13 +34,17 @@ const MeetupsTable: React.FC = () => {
   useInterval(() => getMeetups(), 2000)
 
   const getMeetups = () => {
-    Service.meetupsControllerGetAll(getStatus(), filter.startDate, filter.endDate)
-      .then((res) => setMeetups(res))
+    axios
+      .get(`http://localhost:3001/meetups`, {
+        params: { status: getStatus(), startDate: filter.startDate, endDate: filter.endDate },
+      })
+      .then((res) => setMeetups(res.data))
       .catch((err) => console.log(err))
   }
 
   const acceptMeetup = (id: number) => {
-    Service.meetupsControllerCompleteByModerator(id, { status: 'утвержден' })
+    axios
+      .put(`http://localhost:3001/meetups/complete/moderator/${id}`, { status: 'утвержден' })
       .then(() => {
         getMeetups()
         useMessage({ messageText: 'Митап успешно утвержден' }, dispatch)
@@ -46,7 +53,8 @@ const MeetupsTable: React.FC = () => {
   }
 
   const rejectMeetup = (id: number) => {
-    Service.meetupsControllerCompleteByModerator(id, { status: 'отклонен' })
+    axios
+      .put(`http://localhost:3001/meetups/complete/moderator/${id}`, { status: 'отклонен' })
       .then(() => {
         getMeetups()
         useMessage({ messageText: 'Митап успешно отклонен' }, dispatch)
