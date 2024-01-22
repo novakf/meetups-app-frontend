@@ -4,9 +4,9 @@ import Breadcrumbs from '../../../../components/Breadcrumbs'
 import { Link, useNavigate } from 'react-router-dom'
 import { draftData, hasDraft, setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { handleKeyPress, useMessage } from '../../../../utils'
-import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import Speaker from '../Speaker'
+import { Service } from '../../../../../../generated/api'
 
 const DraftPage: React.FC = () => {
   const draft = draftData()
@@ -19,49 +19,43 @@ const DraftPage: React.FC = () => {
   const dispatch = useDispatch()
 
   const getDraft = () => {
-    axios
-      .get(`http://localhost:3001/meetups/${draft.id}`)
+    Service.meetupsControllerGetById(draft.id)
       .then((res) => {
-        dispatch(setDraftDataAction(res.data))
+        dispatch(setDraftDataAction(res))
       })
       .catch((err) => console.log(err))
   }
 
   const save = () => {
-    axios
-      .put('http://localhost:3001/meetups', {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-        title,
-        place,
-        date,
-        description,
-      })
+    Service.meetupsControllerUpdate({
+      title,
+      place,
+      date,
+      description,
+    })
       .then(() => {
         getDraft()
-        useMessage({ messageText: 'Заяка успешно сохранена' }, dispatch)
+        useMessage({ messageText: 'Митап успешно сохранен' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
 
   const deleteMeetup = () => {
-    axios
-      .put('http://localhost:3001/meetups/delete')
+    Service.meetupsControllerDeleteByCreator()
       .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/speakers')
-        useMessage({ messageText: 'Заяка успешно удалена' }, dispatch)
+        useMessage({ messageText: 'Заявка успешно удалена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
 
   const submit = () => {
-    axios
-      .put('http://localhost:3001/meetups/complete/creator/')
+    Service.meetupsControllerCompleteByCreator()
       .then(() => {
         dispatch(setDraftDataAction(undefined))
         navigate('/profile/meetups')
+        useMessage({ messageText: 'Митап успешно сформирован' }, dispatch)
       })
       .catch((err) => {
         useMessage({ messageText: err.response.data.message, status: 'error' }, dispatch)

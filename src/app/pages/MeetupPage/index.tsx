@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import Speaker from './components/Speaker'
-import { MeetupsType } from '../../types'
 import { draftData } from '../../store/slices/draftSlice'
 import Draft from './components/Draft'
+import { Meetup, Service } from '../../../../generated/api'
 
 const MeetupPage: React.FC = () => {
-  const [meetup, setMeetup] = useState<MeetupsType | null>(null)
+  const [meetup, setMeetup] = useState<Meetup | null>(null)
 
   const id = Number(useLocation().pathname.split('/')[3])
   const draft = draftData()
@@ -17,9 +16,8 @@ const MeetupPage: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/meetups/${id}`)
-      .then((res) => setMeetup(res.data))
+    Service.meetupsControllerGetById(id)
+      .then((res) => setMeetup(res))
       .catch((err) => console.log(err))
   }, [])
 
@@ -51,6 +49,7 @@ const MeetupPage: React.FC = () => {
           <div style={{ width: '45%' }}>
             <InputLabelSpeakers>Участвующие спикеры</InputLabelSpeakers>
             {meetup?.speakers?.map((speaker) => {
+              console.log(meetup)
               return <Speaker speaker={speaker} key={speaker.id} />
             })}
             <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>

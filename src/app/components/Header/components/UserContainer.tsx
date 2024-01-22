@@ -1,12 +1,12 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { UserType } from '../../../types'
-import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUserDataAction } from '../../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 import { setDraftDataAction } from '../../../store/slices/draftSlice'
 import { useMessage } from '../../../utils'
+import { Service } from '../../../../../generated/api'
 
 type Props = {
   user: UserType
@@ -18,12 +18,7 @@ const UserContainer: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate()
 
   const exitAccount = () => {
-    axios
-      .post('http://localhost:3001/auth/logout', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    Service.authControllerLogout()
       .then(() => {
         dispatch(setUserDataAction(undefined))
         dispatch(setDraftDataAction(undefined))
