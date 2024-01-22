@@ -18,6 +18,15 @@ const DraftPage: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const getDraft = () => {
+    axios
+      .get(`http://localhost:3001/meetups/${draft.id}`)
+      .then((res) => {
+        dispatch(setDraftDataAction(res.data))
+      })
+      .catch((err) => console.log(err))
+  }
+
   const save = () => {
     axios
       .put('http://localhost:3001/meetups', {
@@ -29,8 +38,9 @@ const DraftPage: React.FC = () => {
         date,
         description,
       })
-      .then((res) => {
-        dispatch(setDraftDataAction(res.data))
+      .then(() => {
+        getDraft()
+        useMessage({ messageText: 'Заяка успешно сохранена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }

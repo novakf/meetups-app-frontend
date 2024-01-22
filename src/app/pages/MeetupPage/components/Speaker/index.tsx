@@ -25,8 +25,8 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
         endsAt,
         reportTheme,
       })
-      .then((res) => {
-        dispatch(setDraftDataAction(res.data))
+      .then(() => {
+        getDraft()
       })
       .catch((err) => console.log(err))
   }
