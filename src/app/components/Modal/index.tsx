@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createRef } from 'react'
-import styled from 'styled-components'
+import Styled from './styles'
 
 type Props = {
   open: boolean
@@ -58,8 +58,8 @@ const GenericModal: React.FC<Props> = (props) => {
   }, [open])
 
   return (
-    <ModalWrapper $open={internalOpen} onClick={handleClick}>
-      <ModalContent
+    <Styled.ModalWrapper $open={internalOpen} onClick={handleClick}>
+      <Styled.ModalContent
         id="modal-content"
         ref={modalRef}
         $open={internalOpen}
@@ -68,43 +68,9 @@ const GenericModal: React.FC<Props> = (props) => {
         }}
       >
         {props.children}
-      </ModalContent>
-    </ModalWrapper>
+      </Styled.ModalContent>
+    </Styled.ModalWrapper>
   )
 }
-
-const ModalWrapper = styled.div<{ $open: boolean }>`
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(0, 0, 0, 0.4);
-  position: fixed;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.2s;
-
-  ${(props) =>
-    props.$open &&
-    `
-      opacity: 1;
-      pointer-events: all;
-  `}
-`
-
-const ModalContent = styled.div<{ $open: boolean }>`
-  width: 1000px;
-  margin: 0 40px;
-  border-radius: 10px;
-  background-color: white;
-  transform: scale(0.2);
-  transition: transform 0.2s;
-
-  ${(props) => props.$open && 'transform: scale(1);'}
-`
 
 export default GenericModal

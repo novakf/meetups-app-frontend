@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
-import { draftData, setDraftDataAction } from '../../../../store/slices/draftSlice'
+import { setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 import { Service, Speaker as SpeakerType } from '../../../../../../generated/api'
 import { useMessage } from '../../../../utils'
@@ -11,7 +11,6 @@ type Props = {
 }
 
 const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
-  const draft = draftData()
   const [start, setStart] = useState(speaker.MeetupsSpeakers?.startsAt ? speaker.MeetupsSpeakers.startsAt : '')
   const [end, setEnd] = useState(speaker.MeetupsSpeakers?.endsAt ? speaker.MeetupsSpeakers.endsAt : '')
   const [title, setTitle] = useState(speaker.MeetupsSpeakers?.reportTheme ? speaker.MeetupsSpeakers.reportTheme : '')
@@ -20,17 +19,9 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
 
   const saveSpeaker = (id: number, startsAt: string, endsAt: string, reportTheme: string) => {
     Service.meetupsControllerUpdateSpeaker(id, { startsAt, endsAt, reportTheme })
-      .then(() => {
-        getDraft()
-        useMessage({ messageText: 'Информация о спикере успешно сохранена' }, dispatch)
-      })
-      .catch((err) => console.log(err))
-  }
-
-  const getDraft = () => {
-    Service.meetupsControllerGetById(draft.id)
       .then((res) => {
         dispatch(setDraftDataAction(res))
+        useMessage({ messageText: 'Информация о спикере успешно сохранена' }, dispatch)
       })
       .catch((err) => console.log(err))
   }
@@ -39,7 +30,6 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
     Service.meetupsControllerDeleteSpeaker(id)
       .then((res) => {
         dispatch(setDraftDataAction(res))
-        getDraft()
         useMessage({ messageText: 'Спикер успешно удален из митапа' }, dispatch)
       })
       .catch((err) => console.log(err))

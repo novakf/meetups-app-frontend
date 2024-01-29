@@ -17,20 +17,10 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
   const draft = draftData()
   const user = userData()
 
-  const getSpeakers = () => {
-    Service.speakersControllerGetByCompany(company)
-      .then((res) => {
-        dispatch(setDraftDataAction(res.meetup))
-      })
-      .catch((error) => {
-        console.log('SpeakersError', error)
-      })
-  }
-
   const addSpeaker = (id: number) => {
     Service.speakersControllerAddToMeetup(id)
-      .then(() => {
-        getSpeakers()
+      .then((data) => {
+        dispatch(setDraftDataAction(data))
       })
       .catch(function (error) {
         console.log(error)
@@ -39,8 +29,8 @@ const Speakers: React.FC<Props> = ({ company, speakers }) => {
 
   const deleteSpeaker = (id: number) => {
     Service.meetupsControllerDeleteSpeaker(id)
-      .then(() => {
-        getSpeakers()
+      .then((data) => {
+        dispatch(setDraftDataAction(data))
       })
       .catch(function (error) {
         console.log(error)
