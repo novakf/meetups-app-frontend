@@ -49,7 +49,6 @@ const MeetupPage: React.FC = () => {
           <div style={{ width: '45%' }}>
             <InputLabelSpeakers>Участвующие спикеры</InputLabelSpeakers>
             {meetup?.speakers?.map((speaker) => {
-              console.log(meetup)
               return <Speaker speaker={speaker} key={speaker.id} />
             })}
             <SaveButton onClick={() => navigate('/profile/meetups')}>{'< Вернуться'}</SaveButton>

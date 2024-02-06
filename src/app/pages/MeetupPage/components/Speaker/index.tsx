@@ -4,6 +4,7 @@ import { setDraftDataAction } from '../../../../store/slices/draftSlice'
 import { useDispatch } from 'react-redux'
 import { Service, Speaker as SpeakerType } from '../../../../../../generated/api'
 import { useMessage } from '../../../../utils'
+import { Link } from 'react-router-dom'
 
 type Props = {
   speaker: SpeakerType
@@ -37,7 +38,7 @@ const Speaker: React.FC<Props> = ({ speaker, isDraft }) => {
 
   return (
     <SpeakerContainer>
-      <SpeakerInfo>
+      <SpeakerInfo to={`/speakers/${speaker.id}`}>
         <AvatarContainer>
           <SpeakerAvatar src={speaker.avatarImg} />
         </AvatarContainer>
@@ -175,12 +176,18 @@ const SpeakerCompany = styled.div`
   color: #00ddff;
 `
 
-const SpeakerInfo = styled.div`
+const SpeakerInfo = styled(Link)`
   display: flex;
   width: 300px;
   gap: 10px;
   height: fit-content;
   align-items: center;
+  text-decoration: none;
+  color: #000;
+
+  &:hover {
+    color: #535353;
+  }
 `
 
 const SpeakerContainer = styled.div`
